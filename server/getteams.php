@@ -1,10 +1,8 @@
 <?php
-require_once ("models/config.php");
 require_once ("models/checkin_db_config.php");
 if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 	die ();
 }
-global $db;
 $errors = array ();
 
 try {
