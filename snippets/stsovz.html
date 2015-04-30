@@ -1,0 +1,13 @@
+<div>
+<h2>Statusoverzicht</h2>
+{{scope.data}}
+<div class="row">
+<div ng-repeat="(key, value) in data | groupBy: 'naam'" class="col-xs-12 col-sm-4">
+	<h3>Team: {{key}}</h3>
+	<div ng-repeat="checkin in value" style="border:solid 1px {{checkin.rgb}};">
+		<h4>{{checkin.user_name}}<small>@{{checkin.locatie}}</small></h4> 
+		<a href="tel:{{checkin.phone}}">{{checkin.phone}}</a>
+	</div>
+</div>
+</div>
+</div>
