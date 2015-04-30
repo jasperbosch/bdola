@@ -5,7 +5,7 @@ $dbVars = array (
 		'user' => 'admin8QMKiyhd',
 		'pass' => 'DDDhUMAEzx7Q'
 );
-
+$db;
 try {
 	$db = new PDO ( 'mysql:host=' . $dbVars ['host'] . ';dbname=' . $dbVars ['dbname'], $dbVars ['user'], $dbVars ['pass'] );
 	$db->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
