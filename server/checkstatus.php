@@ -1,7 +1,6 @@
 <?php
 require_once ("models/checkin_db_config.php");
-function getCheckinStatus($username) {
-	global $db;
+function getCheckinStatus($username, $db) {
 	$errors = array ();
 	
 	try {

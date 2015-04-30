@@ -74,7 +74,7 @@ if (! empty ( $_POST )) {
 					$loggedInUser->displayname = $userdetails ["display_name"];
 					$loggedInUser->username = $userdetails ["user_name"];
 					
-					$locatie = getCheckinStatus($userdetails ["user_name"]);
+					$locatie = getCheckinStatus($userdetails ["user_name"],$db);
 					$loggedInUser->checkstatus = ($locatie != -1);
 					if ($locatie != -1){
 						$loggedInUser->locatie = $locatie;
