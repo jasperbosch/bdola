@@ -5,6 +5,9 @@ if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 }
 $errors = array ();
 
+var_dump($db);
+die();
+
 try {
 	$sQuery = "SELECT * FROM ch_teams";
 	
