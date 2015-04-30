@@ -1,4 +1,6 @@
 <?php
+require_once("class.error.php");
+
 $dbVars = array (
 		'host' => 'localhost',
 		'dbname' => 'checkin',
