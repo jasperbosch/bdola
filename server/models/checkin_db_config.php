@@ -2,8 +2,8 @@
 $db = array (
 		'host' => 'localhost',
 		'dbname' => 'checkin',
-		'user' => 'sqluser',
-		'pass' => 'sqluser'
+		'user' => 'admin8QMKiyh',
+		'pass' => 'DDDhUMAEzx7Q'
 );
 
 try {
