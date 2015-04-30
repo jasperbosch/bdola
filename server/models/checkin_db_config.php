@@ -1,5 +1,5 @@
 <?php
-$db = array (
+$dbVars = array (
 		'host' => 'localhost',
 		'dbname' => 'checkin',
 		'user' => 'admin8QMKiyh',
@@ -7,7 +7,7 @@ $db = array (
 );
 
 try {
-	$db = new PDO ( 'mysql:host=' . $db ['host'] . ';dbname=' . $db ['dbname'], $db ['user'], $db ['pass'] );
+	$db = new PDO ( 'mysql:host=' . $dbVars ['host'] . ';dbname=' . $dbVars ['dbname'], $dbVars ['user'], $dbVars ['pass'] );
 	$db->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 	$db->query ( "SET SESSION sql_mode = 'ANSI,ONLY_FULL_GROUP_BY'" );
 } catch ( PDOException $e ) {
