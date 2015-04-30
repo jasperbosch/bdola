@@ -1,15 +1,8 @@
 <?php
-require_once("class.error.php");
-
-$dbVars = array (
-		'host' => 'localhost',
-		'dbname' => 'checkin',
-		'user' => 'admin8QMKiyhd',
-		'pass' => 'DDDhUMAEzx7Q'
-);
+require_once("db-settings.php");
 
 // try {
-	$db = new PDO ( 'mysql:host=' . $dbVars ['host'] . ';dbname=' . $dbVars ['dbname'], $dbVars ['user'], $dbVars ['pass'] );
+	$db = new PDO ( 'mysql:host=' . $db_host . ';dbname=' . $db_name, $db_user, $db_pass );
 	$db->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 	$db->query ( "SET SESSION sql_mode = 'ANSI,ONLY_FULL_GROUP_BY'" );
 // } catch ( PDOException $e ) {
