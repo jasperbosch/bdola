@@ -2,7 +2,7 @@
 $dbVars = array (
 		'host' => 'localhost',
 		'dbname' => 'checkin',
-		'user' => 'admin8QMKiyh',
+		'user' => 'admin8QMKiyhd',
 		'pass' => 'DDDhUMAEzx7Q'
 );
 
