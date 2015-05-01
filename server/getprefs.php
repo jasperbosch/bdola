@@ -1,6 +1,5 @@
 <?php
 require_once ("models/config.php");
-require_once ("models/checkin_db_config.php");
 if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 	die ();
 }
@@ -10,14 +9,17 @@ $errors = array ();
 $username = trim ( $_SESSION [SESSION_USER]->username );
 
 try {
-	$sQuery = "SELECT * FROM ch_preferences WHERE user_name = :user_name";
+	$sQuery = "SELECT * FROM ch_preferences WHERE user_name = ?";
 	
-	$oStmt = $db->prepare ( $sQuery );
-	$oStmt->bindParam ( ':user_name', $username, PDO::PARAM_STR );
-	$oStmt->execute ();
+	$stmt = $mysqli->prepare ( $sQuery );
+	$stmt->bind_param ( 's', $username );
+	$stmt->execute ();
+	$stmt->bind_result($username,$phone,$team,$timestamp);
+	while ($stmt->fetch()){
+		$data = array('user_name'=>$username,'phone'=>$phone,'team'=>$team);
+	}
 	
-	$data = $oStmt->fetchAll ( PDO::FETCH_OBJ );
-} catch ( PDOException $e ) {
+} catch ( Exception $e ) {
 	$sMsg = 'Regelnummer: ' . $e->getLine () . '
 		Bestand: ' . $e->getFile () . '
 		Foutmelding: ' . $e->getMessage ();

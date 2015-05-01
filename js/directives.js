@@ -17,8 +17,15 @@ app.directive(
 app.directive('logoutDialog', function() {
 	return {
 		restrict : 'A',
-		template : '<div ng-include="\'snippets/logout-form.html\'">',
+		template : '<div ng-include="\'snippets/logout-form.html\'">'
 	};
+})
+
+app.directive('checkinDialog', function(){
+	return {
+		restrict : 'A',
+		template : '<div ng-include="\'snippets/checkin.html\'">'
+	}
 })
 
 app.directive('bootstrapSwitch', [ function() {
@@ -39,10 +46,14 @@ app.directive('bootstrapSwitch', [ function() {
 				if (newValue !== undefined) {
 					if (newValue) {
 						element.bootstrapSwitch('state', true, true);
-						scope.checkin();
+						if (newValue && !oldValue) {
+							scope.checkin();
+						}
 					} else if (!newValue) {
 						element.bootstrapSwitch('state', false, true);
-						scope.checkout();
+						if (!newValue && oldValue) {
+							scope.checkout();
+						}
 					}
 				}
 			});
@@ -50,16 +61,16 @@ app.directive('bootstrapSwitch', [ function() {
 	};
 } ]);
 
-app.directive('selectWatcher', function ($timeout) {
-    return {
-        link: function (scope, element, attr) {
-            var last = attr.last;
-            if (last === "true") {
-                $timeout(function () {
-//                    $(element).parent().selectpicker('val', 'any');
-                    $(element).parent().selectpicker('refresh');
-                });
-            }
-        }
-    };
-});
+//app.directive('selectWatcher', function($timeout) {
+//	return {
+//		link : function(scope, element, attr) {
+//			var last = attr.last;
+//			if (last === "true") {
+//				$timeout(function() {
+//					$(element).parent().selectpicker('val', 'any');
+//					$(element).parent().selectpicker('refresh');
+//				});
+//			}
+//		}
+//	};
+//});

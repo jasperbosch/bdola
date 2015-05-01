@@ -1,6 +1,5 @@
 <?php
 require_once ("models/config.php");
-require_once ("models/checkin_db_config.php");
 if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 	die ();
 }
@@ -11,15 +10,17 @@ $request = json_decode ( $postdata );
 // Forms posted
 if (! empty ( $request )) {
 	$errors = array ();
-	$username = trim ( $request->userid );
+	$username = trim ( $_SESSION [SESSION_USER]->username );
 	
 	try {
-		$sQuery = "DELETE FROM ch_checkins WHERE user_name = :user_name";
+		$sQuery = "DELETE FROM ch_checkins WHERE user_name = ?";
 		
-		$oStmt = $db->prepare ( $sQuery );
-		$oStmt->bindParam ( ':user_name', $username, PDO::PARAM_STR );
-		$oStmt->execute ();
-	} catch ( PDOException $e ) {
+		$stmt = $mysqli->prepare ( $sQuery );
+		$stmt->bind_param ( 's', $username );
+		$stmt->execute ();
+		$stmt->close();
+		
+	} catch ( Exception $e ) {
 		$sMsg = 'Regelnummer: ' . $e->getLine () . '
 				Bestand: ' . $e->getFile () . '
 				Foutmelding: ' . $e->getMessage () ;
@@ -36,7 +37,7 @@ if (count ( $errors ) > 0) {
 			'id' => session_id (),
 			'error' => $errors 
 	);
+	echo json_encode ( $data );
 }
-echo json_encode ( $data );
 
 ?>

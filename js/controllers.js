@@ -36,42 +36,40 @@ app.controller('LoginController', function($scope, $rootScope, AuthService) {
 			// console.log("Logout NOK");
 		});
 	}
-	$scope.loginstatus = function(credentials) {
+})
+
+app.controller('ApplicationController', function($scope, AuthService,
+		CheckinService, PrefsService) {
+	$scope.currentUser = null;
+	$scope.isAuthorized = AuthService.isAuthorized;
+	$scope.teams;
+
+	$scope.isLoginPage = false;
+
+	$scope.init = function() {
+		CheckinService.getLocaties().then(function(result) {
+			if (result.error === undefined) {
+				$scope.locaties = result;
+			} else {
+				$scope.setAlerts(result.error);
+			}
+		});
+		PrefsService.getteams().then(function(result) {
+			if (result.data.error === undefined) {
+				$scope.teams = result.data;
+			} else {
+				$scope.setAlerts(result.data.error);
+			}
+		});
 		AuthService.loginstatus().then(function(user) {
 			if (user !== undefined) {
 				$scope.setCurrentUser(user);
-				$scope.setLocatie(user.locatie);
-				$scope.setCheckstate(user.checkstatus);
 			}
 		}, function(msg) {
 			$scope.setAlerts(msg);
 		});
-	};
-	$scope.loginstatus();
-})
-
-app.controller('LocatieCtrl', function($scope, $timeout, Session) {
-	$scope.model = $scope.locatie;
-	$scope.locaties = [ 'Thuis', 'Walterbos F3.43', 'Walterbos F3.49' ];
-
-	$scope.$watch(function(scope) {
-		return scope.model
-	}, function(newValue) {
-		Session.setLocatie(newValue);
-		$scope.setLocatie(newValue);
-	});
-
-	$scope.selectWithOptionsIsVisible = true;
-})
-
-app.controller('ApplicationController', function($scope, AuthService,
-		CheckinService) {
-	$scope.currentUser = null;
-	$scope.isAuthorized = AuthService.isAuthorized;
-	$scope.checkstate = false;
-	$scope.locatie = null;
-
-	$scope.isLoginPage = false;
+	}
+	$scope.init();
 
 	// (scope.getCurrentUser()==null);
 
@@ -91,8 +89,8 @@ app.controller('ApplicationController', function($scope, AuthService,
 		}
 	}
 
-	$scope.getLocation = function() {
-		if ($scope.locatie != null) {
+	$scope.getLocatie = function() {
+		if ($scope.location != null) {
 			return "disabled";
 		} else {
 			return "";
@@ -113,8 +111,31 @@ app.controller('ApplicationController', function($scope, AuthService,
 		$scope.alerts.splice(index, 1);
 	};
 
+	$scope.setLocatie = function(locatie) {
+//		$scope.model.location = locatie;
+	}
+
+	$scope.setCheckstate = function(checkstate) {
+//		$scope.model.checkstate = checkstate;
+	}
+})
+
+app.controller('CheckinCtrl',function($scope, CheckinService) {
+	$scope.check;
+	$scope.init = function() {
+		$scope.check = {
+			location : -1 ,
+			checkstate : null
+		};
+			CheckinService.getLocatie().then(function(result){
+				$scope.check.location = result.locatie;
+				$scope.check.checkstate= (result != "null");
+		});
+	}
+	$scope.init();
+	
 	$scope.checkin = function() {
-		CheckinService.checkin().then(function(res) {
+		CheckinService.checkin($scope.check).then(function(res) {
 			if (res !== undefined) {
 				$scope.setAlerts(res);
 			} else {
@@ -132,14 +153,16 @@ app.controller('ApplicationController', function($scope, AuthService,
 			}
 		});
 	}
-
-	$scope.setLocatie = function(locatie) {
-		$scope.locatie = locatie;
+	
+	$scope.locationDisabled = function(){
+		if ($scope.check.checkstate == null || !$scope.check.checkstate){
+			return true;
+		} else {
+			return false;
+		}
 	}
+	
 
-	$scope.setCheckstate = function(checkstate) {
-		$scope.checkstate = checkstate;
-	}
 })
 
 app.controller('NavCtrl', [ '$scope', '$location', function($scope, $location) {
@@ -151,8 +174,8 @@ app.controller('NavCtrl', [ '$scope', '$location', function($scope, $location) {
 
 app.controller('StsOvzCtrl', function($scope, $compile, CheckinService) {
 	$scope.data;
-	$scope.init = function(){
-		CheckinService.getStatus().then(function(result){
+	$scope.init = function() {
+		CheckinService.getStatus().then(function(result) {
 			if (result.error === undefined) {
 				$scope.data = result;
 			} else {
@@ -175,25 +198,17 @@ app.controller('AfwMutCtrl', function($scope, $compile) {
 });
 
 app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
-	$scope.teams;
 	$scope.prefs;
 
 	$scope.initPrefs = function() {
 		$scope.prefs = {
-				phone : '',
-				team : ''
-			};
-		PrefsService.getteams().then(function(result) {
+			phone : '',
+			team : ''
+		};
+		PrefsService.getprefs().then(function(result) {
 			if (result.data.error === undefined) {
-				$scope.teams = result.data;
-				PrefsService.getprefs().then(function(result) {
-					if (result.data.error === undefined) {
-						$scope.prefs.phone = result.data[0].phone;
-						$scope.prefs.team = result.data[0].team;
-					} else {
-						$scope.setAlerts(result.data.error);
-					}
-				});
+				$scope.prefs.phone = result.data.phone;
+				$scope.prefs.team = result.data.team;
 			} else {
 				$scope.setAlerts(result.data.error);
 			}
@@ -215,5 +230,5 @@ app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
 			$scope.setAlerts(msg);
 		});
 	};
-
+	
 });

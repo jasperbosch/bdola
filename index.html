@@ -46,7 +46,7 @@
 
 		<div logout-dialog ng-if="currentUser!=null" class="clearfix"></div>
 		<div ng-if="currentUser!=null">
-			<nav class="navbar navbar-default" ng-controller="NavCtrl">
+			<nav class="navbar navbar-default">
 			  <div class="container-fluid">
 			  <!-- Brand and toggle get grouped for better mobile display -->
 			    <div class="navbar-header">
@@ -60,26 +60,13 @@
 			    </div>		
 			     <!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			      <ul class="nav navbar-nav navbar-left">
+			      <ul class="nav navbar-nav navbar-left"  ng-controller="NavCtrl">
 			        <li ng-class="navClass('stsovz')"><a href="#/stsovz">Huidige status</a></li>
 			        <li ng-class="navClass('afwovz')"><a href="#/afwovz">Wie is er wanneer niet</a></li>
 			        <li ng-class="navClass('afwmut')"><a href="#/afwmut">Aan/afwezigheid</a></li>
 			      	<li ng-class="navClass('prefs')"><a href="#/prefs">Preferences</a></li>
 				  </ul>			    
-			      <ul class="nav navbar-nav navbar-right">
-			      	<li class="padding">
-				         <section ng-controller="LocatieCtrl" >
-					         <div toggle-dropdown>
-						         <select selectpicker ng-model="model" ng-options="l as l for l in locaties" >
-	                                <option value="">Kies een locatie...</option>
-	                            </select>
-					         </div>
-				         </section>
-				        </li>
-				        <li class="padding">
-							<input type="checkbox" ng-model="checkstate" bootstrap-switch />
-						</li>
-					</ul>
+			      <div checkin-dialog></div>
 				</div>
 			</nav>
 			<div ng-view> </div>

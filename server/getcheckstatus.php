@@ -1,10 +1,8 @@
 <?php
 require_once ("models/config.php");
-require_once ("checkstatus.php");
 if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 	die ();
 }
-global $db;
 $errors = array ();
 
 $userData = fetchAllUsers();
@@ -15,22 +13,29 @@ try {
 		
 		$username = $v1['user_name'];
 		
-		$sQuery = "SELECT a.user_name, a.phone, b.naam, b.rgb, c.locatie
+		$sQuery = "SELECT a.user_name, a.phone, b.naam, b.rgb, d.locatie
 				FROM ch_preferences a 
 				LEFT JOIN ch_teams b 
 					ON b.id=a.team
 				LEFT JOIN ch_checkins c
-					ON c.user_name = a.user_name
-				WHERE a.user_name = :username";
+					ON c.user_name = ?
+				LEFT JOIN ch_locaties d
+					ON d.id = c.locatie
+				WHERE a.user_name = ?";
 	
-		$oStmt = $db->prepare ( $sQuery );
-		$oStmt->bindParam ( ':username', $username, PDO::PARAM_STR );
-		$oStmt->execute();
-	
-		array_push($data,$oStmt->fetch ( PDO::FETCH_OBJ ));
+		$stmt = $mysqli->prepare ( $sQuery );
+		$stmt->bind_param ( 'ss', $username, $username);
+		$stmt->execute();
+		$stmt->bind_result($user,$phone,$naam,$rgb,$locatie);
+		
+		while ($stmt->fetch()){
+			array_push($data,array('user_name'=>$user,'phone'=>$phone,'naam'=>$naam,'rgb'=>$rgb,'locatie'=>$locatie));
+			break;
+		}
+		$stmt->close();
 	}
 
-} catch ( PDOException $e ) {
+} catch ( Exception $e ) {
 	$sMsg = 'Regelnummer: ' . $e->getLine () . '
 				Bestand: ' . $e->getFile () . '
 				Foutmelding: ' . $e->getMessage ();

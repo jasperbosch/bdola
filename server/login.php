@@ -74,15 +74,9 @@ if (! empty ( $_POST )) {
 					$loggedInUser->displayname = $userdetails ["display_name"];
 					$loggedInUser->username = $userdetails ["user_name"];
 					
-					$locatie = -1;//getCheckinStatus($userdetails ["user_name"],$db);
-					$loggedInUser->checkstatus = ($locatie != -1);
-					if ($locatie != -1){
-						$loggedInUser->locatie = $locatie;
-					}
-					
 					// Update last sign in
 					$loggedInUser->updateLastSignIn ();
-					$_SESSION ["userCakeUser"] = $loggedInUser;
+					$_SESSION [SESSION_USER] = $loggedInUser;
 					$data = array (
 							'id' => session_id (),
 							'user' => $loggedInUser 

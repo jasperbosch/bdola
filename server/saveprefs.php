@@ -1,6 +1,5 @@
 <?php
 require_once ("models/config.php");
-require_once ("models/checkin_db_config.php");
 if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 	die ();
 }
@@ -14,54 +13,52 @@ if (! empty ( $request )) {
 	$errors = array ();
 	$username = trim ( $_SESSION [SESSION_USER]->username );
 	$phone = trim ( $request->phone );
-	$team =  $request->team ;
+	$team = $request->team;
 	
 	try {
-		$sQuery = "SELECT count(*) FROM ch_preferences WHERE user_name = :user_name";
+		$sQuery = "SELECT count(*) FROM ch_preferences WHERE user_name = ?";
 		
-		$oStmt = $db->prepare ( $sQuery );
-		$oStmt->bindParam ( ':user_name', $username, PDO::PARAM_STR );
-		$oStmt->execute ();
+		$stmt = $mysqli->prepare ( $sQuery );
+		$stmt->bind_param ( 's', $username );
+		$stmt->execute ();
+		$stmt->store_result ();
+		$num_returns = $stmt->num_rows;
+		$stmt->close ();
 		
 		$result = - 1;
-		while ( $aRow = $oStmt->fetch ( PDO::FETCH_ASSOC ) ) {
+		if ($num_returns > 0) {
 			$result = 0;
 		}
 		
 		if ($result < 0) {
 			// Er was nog geen record, dus INSERT
 			$sQuery = "INSERT INTO ch_preferences (
-            	user_name,
-				phone,
-				team
+            	user_name,phone,team
         	) VALUES (
-            	:user_name,
-				:phone,
-				:team
+            	?,?,?
         	)";
+			$stmt = $mysqli->prepare ( $sQuery );
+			$stmt->bind_param ( 'sss', $username, $phone, $team );
 		} else {
 			// Er was al wel een record, dus UPDATE
 			$sQuery = "UPDATE ch_preferences SET
-				phone = :phone,
-				team = :team
-        	WHERE user_name = :user_name";
+				phone = ?,
+				team = ?
+        	WHERE user_name = ?";
+			$stmt = $mysqli->prepare ( $sQuery );
+			$stmt->bind_param ( 'sss', $phone, $team, $username );
 		}
-
-		$oStmt = $db->prepare ( $sQuery );
-		$oStmt->bindParam ( ':user_name', $username, PDO::PARAM_STR );
-		$oStmt->bindParam ( ':phone', $phone, PDO::PARAM_STR );
-		$oStmt->bindParam ( ':team', $team, PDO::PARAM_INT );
-		$oStmt->execute ();
+		
+		$stmt->execute ();
 		
 		$data = array (
 				'id' => session_id (),
-				'data' => "OK"
+				'data' => "OK" 
 		);
-		
-	} catch ( PDOException $e ) {
+	} catch ( Exception $e ) {
 		$sMsg = 'Regelnummer: ' . $e->getLine () . '
 		Bestand: ' . $e->getFile () . '
-		Foutmelding: ' . $e->getMessage () ;
+		Foutmelding: ' . $e->getMessage ();
 		
 		$error = new error ();
 		$error->type = "danger";

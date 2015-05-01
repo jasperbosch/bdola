@@ -1,6 +1,5 @@
 <?php
 require_once ("models/config.php");
-require_once ("models/checkin_db_config.php");
 if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 	die ();
 }
@@ -12,28 +11,25 @@ $request = json_decode ( $postdata );
 // Forms posted
 if (! empty ( $request )) {
 	$errors = array ();
-	$username = trim ( $request->userid );
-	$locatie = trim ( $request->locatie );
+	$username = trim ( $_SESSION [SESSION_USER]->username );
+	$locatie = trim ( $request->location );
 	
 	try {
 		$sQuery = " 
         INSERT INTO ch_checkins 
         ( 
-            user_name,
-			locatie 
+            user_name,locatie 
         ) 
         VALUES 
         ( 
-            :user_name,
-			:locatie 
+            ?,? 
         ) 
     ";
 		
-		$oStmt = $db->prepare ( $sQuery );
-		$oStmt->bindParam ( ':user_name', $username, PDO::PARAM_STR );
-		$oStmt->bindParam ( ':locatie', $locatie, PDO::PARAM_STR );
-		$oStmt->execute ();
-	} catch ( PDOException $e ) {
+		$stmt = $mysqli->prepare ( $sQuery );
+		$stmt->bind_param ( 'ss', $username, $locatie );
+		$stmt->execute ();
+	} catch ( Exception $e ) {
 		// Geen foutmelding om duplicate te voorkomen.
 		
 		// $sMsg = 'Regelnummer: ' . $e->getLine () . '

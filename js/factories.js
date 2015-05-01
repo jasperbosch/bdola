@@ -58,12 +58,8 @@ app.factory('AuthService', function($http, Session) {
 app.factory('CheckinService', function($http, Session) {
 	var checkinService = {};
 
-	checkinService.checkin = function() {
-		checkin = {
-			'userid' : Session.getUserId(),
-			'locatie' : Session.getLocatie()
-		};
-		return $http.post('server/checkin.php', checkin).then(function(res) {
+	checkinService.checkin = function(check) {
+		return $http.post('server/checkin.php', check).then(function(res) {
 			return res.data.error;
 		});
 	};
@@ -79,6 +75,16 @@ app.factory('CheckinService', function($http, Session) {
 		return $http.get('server/getcheckstatus.php').then(function(res){
 			return res.data;
 		});
+	}
+	checkinService.getLocaties = function(){
+		return $http.get('server/getlocaties.php').then(function(res){
+			return res.data;
+		});
+	}
+	checkinService.getLocatie = function(){
+		return $http.get('server/checkstatus.php').then(function(res){
+			return res.data;
+		}); 
 	}
 	return checkinService;
 })
