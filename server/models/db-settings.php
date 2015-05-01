@@ -7,17 +7,17 @@ http://usercake.com
 define('SESSION_USER','userCakeUser');
 
 //Database Information
-$db_host = "localhost"; //Host address (most likely localhost)
-$db_name = "checkin"; //Name of Database
-$db_user = "sqluser"; //Name of database user
-$db_pass = "sqluser"; //Password for database user
-$db_table_prefix = "uc_";
-
 // $db_host = "localhost"; //Host address (most likely localhost)
 // $db_name = "checkin"; //Name of Database
-// $db_user = "admin8QMKiyh"; //Name of database user
-// $db_pass = "DDDhUMAEzx7Q"; //Password for database user
+// $db_user = "sqluser"; //Name of database user
+// $db_pass = "sqluser"; //Password for database user
 // $db_table_prefix = "uc_";
+
+$db_host = "localhost"; //Host address (most likely localhost)
+$db_name = "checkin"; //Name of Database
+$db_user = "admin8QMKiyh"; //Name of database user
+$db_pass = "DDDhUMAEzx7Q"; //Password for database user
+$db_table_prefix = "uc_";
 
 GLOBAL $errors;
 GLOBAL $successes;
