@@ -27,7 +27,7 @@ if (! empty ( $request )) {
     ";
 		
 		$stmt = $mysqli->prepare ( $sQuery );
-		$stmt->bind_param ( 'ss', $username, $locatie );
+		$stmt->bind_param ( 'si', $username, $locatie );
 		$stmt->execute ();
 	} catch ( Exception $e ) {
 		// Geen foutmelding om duplicate te voorkomen.

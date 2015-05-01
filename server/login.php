@@ -4,7 +4,6 @@
  * http://usercake.com
  */
 require_once ("models/config.php");
-require_once ("checkstatus.php");
 if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 	die ();
 }

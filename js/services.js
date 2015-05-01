@@ -1,5 +1,5 @@
 app.service('Session', function() {
-	this.create = function(sessionId, userId, userRole, username,checkstatus, locatie) {
+	this.create = function(sessionId, userId, userRole, username) {
 		this.id = sessionId;
 		this.userId = userId;
 		this.userRole = userRole;

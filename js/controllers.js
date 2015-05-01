@@ -6,10 +6,10 @@ app.controller('LoginController', function($scope, $rootScope, AuthService) {
 	$scope.login = function(credentials) {
 		AuthService.login(credentials).then(function(user) {
 			if (user.username !== undefined) {
-				// console.log("Login OK");
+//				 console.log("Login OK");
 				$scope.setCurrentUser(user);
-				$scope.setLocatie(user.locatie);
-				$scope.setCheckstate(user.checkstatus);
+//				$scope.setLocatie(user.locatie);
+//				$scope.setCheckstate(user.checkstatus);
 				$scope.setAlerts([ {
 					type : 'success',
 					msg : "User logged in"

@@ -6,9 +6,7 @@ app.factory('AuthService', function($http, Session) {
 				function(res) {
 					if (res.data.user != null) {
 						Session.create(res.data.id, res.data.user.username,
-								res.data.user.role, res.data.user.displayname,
-								res.data.user.checkstatus,
-								res.data.user.locatie);
+								res.data.user.role, res.data.user.displayname);
 						return res.data.user;
 					} else {
 						return res.data.error;
