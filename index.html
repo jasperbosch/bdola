@@ -37,16 +37,8 @@
 		.disabled .caret{display:none;}
 	</style>
 </head>
-<body >
-	<div class="container" ng-controller="ApplicationController">
-		<div ng-if="dangerMessage!=null" class="alert alert-danger" role="alert">{{dangerMessage}}</div>
-		<div ng-if="successMessage!=null" class="alert alert-success" role="alert">{{successMessage}}</div>
-
-	  <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-
-		<div logout-dialog ng-if="currentUser!=null" class="clearfix"></div>
-		<div ng-if="currentUser!=null">
-			<nav class="navbar navbar-default">
+<body ng-controller="ApplicationController">
+			<nav class="navbar navbar-default .navbar-fixed-top" ng-if="currentUser!=null">
 			  <div class="container-fluid">
 			  <!-- Brand and toggle get grouped for better mobile display -->
 			    <div class="navbar-header">
@@ -67,12 +59,16 @@
 			        <li ng-class="navClass('afwmut')"><a href="#/afwmut">Aan/afwezigheid</a></li>
 			      	<li ng-class="navClass('prefs')"><a href="#/prefs">Preferences</a></li>
 				  </ul>			    
+				  <ul class=" nav navbar-nav navbar-right">
+				  	<li>
+						<div logout-dialog class="clearfix"></div>
+				  	</li>
+				  </ul>				
 				</div>
 			</nav>
-			<div ng-view> </div>
-		</div>
-		
-		
+		<div class="container" >
+	  		<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+			<div ng-view ng-if="currentUser!=null"> </div>
 		<div login-dialog ng-if="currentUser==null" ></div>
 	</div>
 </body>
