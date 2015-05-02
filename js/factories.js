@@ -58,7 +58,7 @@ app.factory('CheckinService', function($http, Session) {
 
 	checkinService.checkin = function(check) {
 		return $http.post('server/checkin.php', check).then(function(res) {
-			return res.data.error;
+			return res.data;
 		});
 	};
 	checkinService.checkout = function() {

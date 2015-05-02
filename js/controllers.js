@@ -6,10 +6,10 @@ app.controller('LoginController', function($scope, $rootScope, AuthService) {
 	$scope.login = function(credentials) {
 		AuthService.login(credentials).then(function(user) {
 			if (user.username !== undefined) {
-//				 console.log("Login OK");
+				// console.log("Login OK");
 				$scope.setCurrentUser(user);
-//				$scope.setLocatie(user.locatie);
-//				$scope.setCheckstate(user.checkstatus);
+				// $scope.setLocatie(user.locatie);
+				// $scope.setCheckstate(user.checkstatus);
 				$scope.setAlerts([ {
 					type : 'success',
 					msg : "User logged in"
@@ -43,10 +43,16 @@ app.controller('ApplicationController', function($scope, AuthService,
 	$scope.currentUser = null;
 	$scope.isAuthorized = AuthService.isAuthorized;
 	$scope.teams;
+	$scope.check;
 
 	$scope.isLoginPage = false;
 
 	$scope.init = function() {
+		$scope.check = {
+			location : -1,
+			checkstate : null,
+			locationname : ''
+		};
 		CheckinService.getLocaties().then(function(result) {
 			if (result.error === undefined) {
 				$scope.locaties = result;
@@ -112,34 +118,31 @@ app.controller('ApplicationController', function($scope, AuthService,
 	};
 
 	$scope.setLocatie = function(locatie) {
-//		$scope.model.location = locatie;
+		// $scope.model.location = locatie;
 	}
 
 	$scope.setCheckstate = function(checkstate) {
-//		$scope.model.checkstate = checkstate;
+		// $scope.model.checkstate = checkstate;
 	}
 })
 
-app.controller('CheckinCtrl',function($scope, CheckinService) {
-	$scope.check;
+app.controller('CheckinCtrl', function($scope, CheckinService) {
 	$scope.init = function() {
-		$scope.check = {
-			location : -1 ,
-			checkstate : null
-		};
-			CheckinService.getLocatie().then(function(result){
-				$scope.check.location = result.locatie;
-				$scope.check.checkstate= (result != "null");
+		CheckinService.getLocatie().then(function(result) {
+			$scope.check.location = result.locatie;
+			$scope.check.checkstate = (result != "null");
+			$scope.check.locationname = result.locatienaam;
 		});
 	}
 	$scope.init();
-	
+
 	$scope.checkin = function() {
 		CheckinService.checkin($scope.check).then(function(res) {
-			if (res !== undefined) {
-				$scope.setAlerts(res);
+			if (res.error !== undefined) {
+				$scope.setAlerts(res.error);
 			} else {
-				// $scope.setAlerts([]);
+				$scope.check.locationname = res.locatie;
+				$scope.check.checkstate = true;
 			}
 		});
 	}
@@ -147,21 +150,21 @@ app.controller('CheckinCtrl',function($scope, CheckinService) {
 	$scope.checkout = function() {
 		CheckinService.checkout().then(function(res) {
 			if (res !== undefined) {
-				$scope.setAlerts(res);
+				$scope.setAlerts(res.error);
 			} else {
-				// $scope.setAlerts([]);
+				$scope.check.locationname = '';
+				$scope.check.checkstate = false;
 			}
 		});
 	}
-	
-	$scope.locationDisabled = function(){
-		if ($scope.check.checkstate == null || !$scope.check.checkstate){
+
+	$scope.locationDisabled = function() {
+		if ($scope.check.checkstate == null || !$scope.check.checkstate) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
 
 })
 
@@ -230,5 +233,5 @@ app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
 			$scope.setAlerts(msg);
 		});
 	};
-	
+
 });

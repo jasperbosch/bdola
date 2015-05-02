@@ -29,6 +29,23 @@ if (! empty ( $request )) {
 		$stmt = $mysqli->prepare ( $sQuery );
 		$stmt->bind_param ( 'si', $username, $locatie );
 		$stmt->execute ();
+		$stmt->close();
+		
+		$sQuery = "SELECT locatie
+				FROM ch_locaties 
+				WHERE id = ?";
+		
+		$stmt = $mysqli->prepare ( $sQuery );
+		$stmt->bind_param ( 'i', $locatie );
+		$stmt->execute ();
+		$stmt->bind_result ( $locatienaam);
+		while ( $stmt->fetch () ) {
+			$data = array (
+					'locatie' => $locatienaam,
+			);
+		}
+		$stmt->close ();
+		
 	} catch ( Exception $e ) {
 		// Geen foutmelding om duplicate te voorkomen.
 		

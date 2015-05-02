@@ -5,6 +5,10 @@ var app = angular.module(
 	.config(
 		function($routeProvider, $locationProvider, $httpProvider) {
 
+			$routeProvider.when('/check', {
+				templateUrl : 'snippets/checkin.html',
+				controller : 'CheckinCtrl'
+			});
 			$routeProvider.when('/stsovz', {
 				templateUrl : 'snippets/stsovz.html',
 				controller : 'StsOvzCtrl'
@@ -22,7 +26,7 @@ var app = angular.module(
 				controller : 'PrefsCtrl'
 			});
 			$routeProvider.otherwise({
-				redirectTo : 'stsovz',
-				controller : 'StsOvzCtrl',
+				redirectTo : 'check',
+				controller : 'CheckinCtrl',
 			});
 		});

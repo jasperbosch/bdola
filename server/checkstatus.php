@@ -4,15 +4,20 @@ global $mysqli;
 $errors = array ();
 $data = null;
 try {
-	$sQuery = "SELECT locatie FROM ch_checkins WHERE user_name = ?";
+	$sQuery = "SELECT a.locatie, b.locatie as locatienaam
+				FROM ch_checkins a
+				LEFT JOIN ch_locaties b
+					ON b.id = a.locatie  
+				WHERE a.user_name = ?";
 	
 	$stmt = $mysqli->prepare ( $sQuery );
 	$stmt->bind_param ( 's', $_SESSION [SESSION_USER]->username );
 	$stmt->execute ();
-	$stmt->bind_result ( $locatie );
+	$stmt->bind_result ( $locatie , $locatienaam);
 	while ( $stmt->fetch () ) {
 		$data = array (
-				'locatie' => $locatie 
+				'locatie' => $locatie,
+				'locatienaam' => $locatienaam 
 		);
 	}
 	$stmt->close ();

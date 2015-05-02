@@ -1,10 +1,12 @@
-<ul class="nav navbar-nav navbar-right" ng-controller="CheckinCtrl">
-    <li class="padding">
-        <select selectpicker data-ng-model="check.location" ng-options="loc.id as loc.locatie for loc in locaties " class="form-control" >
-             <option value="">Kies een locatie...</option>
-         </select>
-     </li>
-     <li class="padding">
-		<input type="checkbox" ng-model="check.checkstate" bootstrap-switch />
-	</li>
-</ul>
+<form name="loginForm" ng-submit="checkin()" class="form-signin" novalidate ng-if="!check.checkstate">
+	<h2 class="form-signin-heading">Check in</h2>
+       <select selectpicker data-ng-model="check.location" ng-options="loc.id as loc.locatie for loc in locaties " class="form-control" >
+            <option value="">Kies een locatie...</option>
+        </select>
+        
+		<input type="submit" class="btn btn-lg btn-primary btn-block" value="Checkin" />
+</form>
+<form name="loginForm" ng-submit="checkout()" class="form-signin" novalidate ng-if="check.checkstate">
+	<h2 class="form-signin-heading">Check out</h2>
+	<input type="submit" class="btn btn-lg btn-primary btn-block" value="Checkout" />
+</form>
