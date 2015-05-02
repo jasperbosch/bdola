@@ -1,4 +1,4 @@
-		<form name="loginForm" ng-submit="save(prefs)" class="form-signin" novalidate>
+		<form name="loginForm" ng-submit="save(prefs)" class="form-signin" >
 			<h2 class="form-signin-heading">Preferences</h2>
 			
 			<div class="input-group">
@@ -14,5 +14,16 @@
     	             <option value="">Kies een team...</option>
         	     </select>
              </div>
+             
+             <div class="input-group">
+             	<label>Uren per dag</label>
+             	<label for="ma" class="sr-only">Maandag</label>
+             	<input type="number" min="0" max="10" id="ma" ng-model="prefs.ma" placeholder="ma" class="form-control" required>
+             	<label for="di" class="sr-only">Dinsdag</label>
+             	<input type="number" min="0" max="10" id="di" ng-model="prefs.di" placeholder="di" class="form-control" required>
+             	<label for="wo" class="sr-only">Woensdag</label>
+             	<input type="number" min="0" max="10" id="wo" ng-model="prefs.wo" placeholder="wo" class="form-control" required>
+             </div>
+             
 			<input type="submit" class="btn btn-lg btn-primary btn-block" value="Save" />
 		</form>
