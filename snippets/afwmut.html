@@ -1,3 +1,28 @@
-<div ng-controller="AfwMutCtrl">
-Afwezigheidsmutatie
+<div>
+<h2>Afwezigheidsmutatie</h2>
+
+<h3>{{calender.currmonthname}}</h3>
+<div class="btn-group" role="group" aria-label="...">
+  <button type="button" class="btn btn-default" ng-click="prev()">Vorige</button>
+  <button type="button" class="btn btn-default" ng-click="init()">Vandaag</button>
+  <button type="button" class="btn btn-default" ng-click="next()">Volgende</button>
+</div>
+<table>
+	<thead>
+		<tr>
+			<th>Ma</th>
+			<th>Di</th>
+			<th>Wo</th>
+			<th>Do</th>
+			<th>Vr</th>
+			<th>Za</th>
+			<th>Zo</th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr ng-repeat="week in calender.weeks">
+		<td ng-repeat="dag in week" dagwidget class="dag"></td>
+	</tr>
+	</tbody>
+</table>
 </div>

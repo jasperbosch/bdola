@@ -14,9 +14,12 @@ try {
 	$stmt = $mysqli->prepare ( $sQuery );
 	$stmt->bind_param ( 's', $username );
 	$stmt->execute ();
-	$stmt->bind_result($username,$phone,$team,$timestamp);
+	$stmt->bind_result($username,$phone,$team,$mo, $tu, $we, $th, $vr, $sa, $su, $timestamp);
 	while ($stmt->fetch()){
-		$data = array('user_name'=>$username,'phone'=>$phone,'team'=>$team);
+		$data = array('user_name'=>$username,
+				'phone'=>$phone,'team'=>$team,
+				'mo'=>$mo, 'tu'=>$tu, 'we'=>$we, 'th'=>$th, 'vr'=>$vr, 'sa'=>$sa, 'su'=>$su
+		);
 	}
 	
 } catch ( Exception $e ) {

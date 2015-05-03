@@ -74,6 +74,11 @@ app.controller('ApplicationController', function($scope, AuthService,
 		}, function(msg) {
 			$scope.setAlerts(msg);
 		});
+		CheckinService.getLocatie().then(function(result) {
+			$scope.check.location = result.locatie;
+			$scope.check.checkstate = (result != "null");
+			$scope.check.locationname = result.locatienaam;
+		});
 	}
 	$scope.init();
 
@@ -128,11 +133,7 @@ app.controller('ApplicationController', function($scope, AuthService,
 
 app.controller('CheckinCtrl', function($scope, CheckinService) {
 	$scope.init = function() {
-		CheckinService.getLocatie().then(function(result) {
-			$scope.check.location = result.locatie;
-			$scope.check.checkstate = (result != "null");
-			$scope.check.locationname = result.locatienaam;
-		});
+		
 	}
 	$scope.init();
 
@@ -195,8 +196,27 @@ app.controller('AfwOvzCtrl', function($scope, $compile) {
 
 });
 
-app.controller('AfwMutCtrl', function($scope, $compile) {
-	console.log('inside contact controller');
+app.controller('AfwMutCtrl', function($scope, $compile, CalenderService) {
+	$scope.calender;
+	
+	$scope.init = function(){
+		CalenderService.getMutCal(0).then(function(result){
+			$scope.calender = result.data;
+		});
+	}
+	$scope.init();
+	
+	$scope.prev = function(){
+		CalenderService.getMutCal( - 1).then(function(result){
+			$scope.calender = result.data;
+		});
+	}
+	
+	$scope.next = function(){
+		CalenderService.getMutCal(1).then(function(result){
+			$scope.calender = result.data;
+		});
+	}
 
 });
 
@@ -206,12 +226,20 @@ app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
 	$scope.initPrefs = function() {
 		$scope.prefs = {
 			phone : '',
-			team : ''
+			team : '',
+			mo:8,tu:8,we:8,th:8,vr:8,sa:0,su:0
 		};
 		PrefsService.getprefs().then(function(result) {
 			if (result.data.error === undefined) {
 				$scope.prefs.phone = result.data.phone;
 				$scope.prefs.team = result.data.team;
+				$scope.prefs.mo = result.data.mo;
+				$scope.prefs.tu = result.data.tu;
+				$scope.prefs.we = result.data.we;
+				$scope.prefs.th = result.data.th;
+				$scope.prefs.vr = result.data.vr;
+				$scope.prefs.sa = result.data.sa;
+				$scope.prefs.su = result.data.su;
 			} else {
 				$scope.setAlerts(result.data.error);
 			}
@@ -234,4 +262,13 @@ app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
 		});
 	};
 
+});
+
+app.controller('dagCtrl', function($scope){
+	
+	$scope.dag;
+	
+	$scope.outsideMonth = function(){
+		return $scope.dag.month==$scope.dag.currmonth;
+	}
 });

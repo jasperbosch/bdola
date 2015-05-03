@@ -114,3 +114,17 @@ app.factory('PrefsService', function($http, Session) {
 	}
 	return prefsService;
 })
+
+app.factory('CalenderService', function($http){
+	var calenderService = {};
+	
+	calenderService.getMutCal = function(delta){
+		return $http.post('server/getmutcal.php',delta).then(
+				function(result){
+					return result;
+				}
+			);
+	}
+	
+	return calenderService;
+})

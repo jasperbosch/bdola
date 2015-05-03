@@ -14,6 +14,13 @@ if (! empty ( $request )) {
 	$username = trim ( $_SESSION [SESSION_USER]->username );
 	$phone = trim ( $request->phone );
 	$team = $request->team;
+	$mo = $request->mo;
+	$tu = $request->tu;
+	$we = $request->we;
+	$th = $request->th;
+	$vr = $request->vr;
+	$sa = $request->sa;
+	$su = $request->su;
 	
 	try {
 		$sQuery = "SELECT count(*) FROM ch_preferences WHERE user_name = ?";
@@ -33,20 +40,27 @@ if (! empty ( $request )) {
 		if ($result < 0) {
 			// Er was nog geen record, dus INSERT
 			$sQuery = "INSERT INTO ch_preferences (
-            	user_name,phone,team
+            	user_name,phone,team,mo,tu,we,th,vr,sa,su
         	) VALUES (
-            	?,?,?
+            	?,?,?,?,?,?,?,?,?,?
         	)";
 			$stmt = $mysqli->prepare ( $sQuery );
-			$stmt->bind_param ( 'ssi', $username, $phone, $team );
+			$stmt->bind_param ( 'ssiiiiiiii', $username, $phone, $team , $mo, $tu, $we, $th, $vr, $sa, $su);
 		} else {
 			// Er was al wel een record, dus UPDATE
 			$sQuery = "UPDATE ch_preferences SET
 				phone = ?,
-				team = ?
+				team = ?,
+				mo = ?,
+				tu = ?,
+				we = ?,
+				th = ?,
+				vr = ?,
+				sa = ?,
+				su = ?
         	WHERE user_name = ?";
 			$stmt = $mysqli->prepare ( $sQuery );
-			$stmt->bind_param ( 'sis', $phone, $team, $username );
+			$stmt->bind_param ( 'siiiiiiiis', $phone, $team, $mo, $tu, $we, $th, $vr, $sa, $su, $username );
 		}
 		
 		$stmt->execute ();
