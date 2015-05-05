@@ -126,5 +126,13 @@ app.factory('CalenderService', function($http){
 			);
 	}
 	
+	calenderService.savedag = function(dag){
+		return $http.post('server/savedag.php', dag).then(
+				function(result){
+					return result;
+				}
+				);
+	}
+	
 	return calenderService;
 })

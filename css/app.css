@@ -62,7 +62,20 @@ td.dag{
 }
 
 .dagobj{width:50px;height: 50px; background-color:navy;}
-.dagobj:hover{background-color:blue;cursor: pointer;}
+.dagobj.vrij{background-color:gray;}
+.dagobj.thuis{background-color:blue;}
+.dagobj:hover{outline:1px solid cyan;cursor: pointer;}
 .dagobj.outsidemonth{background-color:silver;cursor: default;}
 
-.dagnr{color:white;}
+.dagnr{color: #FFFFFF;
+    float: left;
+    line-height: 19px;}
+.uren{color: #FFFF00;
+    font-size: 23px;
+    line-height: 23px;
+    padding-left: 10px;}
+.form-uren{
+		position: relative;
+		top:-10px;
+}
+.form-uren .form-control:focus{box-shadow:none;}

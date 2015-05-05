@@ -7,27 +7,21 @@ if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 $data = NULL;
 $postdata = file_get_contents ( "php://input" );
 $request = json_decode ( $postdata );
-setlocale(LC_ALL, 'nl_NL');
+setlocale ( LC_ALL, 'nl_NL' );
 
 // Forms posted
 if (! empty ( $request )) {
 	$errors = array ();
 	$username = trim ( $_SESSION [SESSION_USER]->username );
-	$phone = trim ( $request->phone );
-	$team = $request->team;
-	$mo = $request->mo;
-	$tu = $request->tu;
-	$we = $request->we;
-	$th = $request->th;
-	$vr = $request->vr;
-	$sa = $request->sa;
-	$su = $request->su;
+	$soort = $request->soort;
+	$uren = $request->uren;
+	$datum = $request->datum;
 	
 	try {
-		$sQuery = "SELECT * FROM ch_preferences WHERE user_name = ?";
+		$sQuery = "SELECT * FROM ch_data WHERE user_name = ? and datum=?";
 		
 		$stmt = $mysqli->prepare ( $sQuery );
-		$stmt->bind_param ( 's', $username );
+		$stmt->bind_param ( 'ss', $username, $datum );
 		$stmt->execute ();
 		$stmt->store_result ();
 		$num_returns = $stmt->num_rows;
@@ -40,31 +34,26 @@ if (! empty ( $request )) {
 		
 		if ($result < 0) {
 			// Er was nog geen record, dus INSERT
-			$sQuery = "INSERT INTO ch_preferences (
-            	user_name,phone,team,mo,tu,we,th,vr,sa,su
+			$sQuery = "INSERT INTO ch_data (
+            	user_name,datum,soort,uren
         	) VALUES (
-            	?,?,?,?,?,?,?,?,?,?
+            	?,?,?,?
         	)";
 			$stmt = $mysqli->prepare ( $sQuery );
-			$stmt->bind_param ( 'ssiddddddd', $username, $phone, $team , $mo, $tu, $we, $th, $vr, $sa, $su);
+			$stmt->bind_param ( 'sssd', $username, $datum, $soort, $uren );
 		} else {
 			// Er was al wel een record, dus UPDATE
-			$sQuery = "UPDATE ch_preferences SET
-				phone = ?,
-				team = ?,
-				mo = ?,
-				tu = ?,
-				we = ?,
-				th = ?,
-				vr = ?,
-				sa = ?,
-				su = ?
-        	WHERE user_name = ?";
+			$sQuery = "UPDATE ch_data SET
+				soort = ?,
+				uren = ?
+        	WHERE user_name = ? and datum = ?";
 			$stmt = $mysqli->prepare ( $sQuery );
-			$stmt->bind_param ( 'siddddddds', $phone, $team, $mo, $tu, $we, $th, $vr, $sa, $su, $username );
+			$stmt->bind_param ( 'sdss', $soort, $uren, $username, $datum );
 		}
 		
 		$stmt->execute ();
+		
+		$errors[]=$stmt->error;
 		
 		$data = array (
 				'id' => session_id (),
@@ -88,5 +77,3 @@ if (count ( $errors ) > 0) {
 	);
 }
 echo json_encode ( $data );
-
-?>

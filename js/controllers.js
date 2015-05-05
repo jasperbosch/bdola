@@ -79,6 +79,32 @@ app.controller('ApplicationController', function($scope, AuthService,
 			$scope.check.checkstate = (result != "null");
 			$scope.check.locationname = result.locatienaam;
 		});
+		$scope.prefs = {
+			phone : '',
+			team : '',
+			mo : 8,
+			tu : 8,
+			we : 8,
+			th : 8,
+			vr : 8,
+			sa : 0,
+			su : 0
+		};
+		PrefsService.getprefs().then(function(result) {
+			if (result.data.error === undefined) {
+				$scope.prefs.phone = result.data.phone;
+				$scope.prefs.team = result.data.team;
+				$scope.prefs.mo = result.data.mo;
+				$scope.prefs.tu = result.data.tu;
+				$scope.prefs.we = result.data.we;
+				$scope.prefs.th = result.data.th;
+				$scope.prefs.vr = result.data.vr;
+				$scope.prefs.sa = result.data.sa;
+				$scope.prefs.su = result.data.su;
+			} else {
+				$scope.setAlerts(result.data.error);
+			}
+		});
 	}
 	$scope.init();
 
@@ -133,7 +159,7 @@ app.controller('ApplicationController', function($scope, AuthService,
 
 app.controller('CheckinCtrl', function($scope, CheckinService) {
 	$scope.init = function() {
-		
+		//$("#menubutton").click();
 	}
 	$scope.init();
 
@@ -192,28 +218,32 @@ app.controller('StsOvzCtrl', function($scope, $compile, CheckinService) {
 });
 
 app.controller('AfwOvzCtrl', function($scope, $compile) {
-	console.log('inside home controller');
+	$scope.init = function() {
+		//$("#menubutton").click();
+	}
+	$scope.init();
 
 });
 
 app.controller('AfwMutCtrl', function($scope, $compile, CalenderService) {
 	$scope.calender;
-	
-	$scope.init = function(){
-		CalenderService.getMutCal(0).then(function(result){
+
+	$scope.init = function() {
+		//$("#menubutton").click();
+		CalenderService.getMutCal(0).then(function(result) {
 			$scope.calender = result.data;
 		});
 	}
 	$scope.init();
-	
-	$scope.prev = function(){
-		CalenderService.getMutCal( - 1).then(function(result){
+
+	$scope.prev = function() {
+		CalenderService.getMutCal(-1).then(function(result) {
 			$scope.calender = result.data;
 		});
 	}
-	
-	$scope.next = function(){
-		CalenderService.getMutCal(1).then(function(result){
+
+	$scope.next = function() {
+		CalenderService.getMutCal(1).then(function(result) {
 			$scope.calender = result.data;
 		});
 	}
@@ -221,29 +251,10 @@ app.controller('AfwMutCtrl', function($scope, $compile, CalenderService) {
 });
 
 app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
-	$scope.prefs;
+//	$scope.prefs;
 
 	$scope.initPrefs = function() {
-		$scope.prefs = {
-			phone : '',
-			team : '',
-			mo:8,tu:8,we:8,th:8,vr:8,sa:0,su:0
-		};
-		PrefsService.getprefs().then(function(result) {
-			if (result.data.error === undefined) {
-				$scope.prefs.phone = result.data.phone;
-				$scope.prefs.team = result.data.team;
-				$scope.prefs.mo = result.data.mo;
-				$scope.prefs.tu = result.data.tu;
-				$scope.prefs.we = result.data.we;
-				$scope.prefs.th = result.data.th;
-				$scope.prefs.vr = result.data.vr;
-				$scope.prefs.sa = result.data.sa;
-				$scope.prefs.su = result.data.su;
-			} else {
-				$scope.setAlerts(result.data.error);
-			}
-		});
+		//$("#menubutton").click();
 	}
 	$scope.initPrefs();
 
@@ -264,11 +275,60 @@ app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
 
 });
 
-app.controller('dagCtrl', function($scope){
-	
+app.controller('dagCtrl', function($scope, CalenderService) {
+
 	$scope.dag;
-	
-	$scope.outsideMonth = function(){
-		return $scope.dag.month==$scope.dag.currmonth;
+
+	$scope.click = function() {
+		switch ($scope.dag.soort) {
+		case 'K':
+			$scope.dag.soort = 'T';
+			break;
+		case 'T':
+			$scope.dag.soort = 'V';
+			$scope.dag.uren = 0.0;
+			break;
+		case 'V':
+			$scope.dag.soort = 'M';
+			switch ($scope.dag.dow) {
+			case 1:
+				$scope.dag.uren = $scope.prefs.mo;
+				break;
+			case 2:
+				$scope.dag.uren = $scope.prefs.tu;
+				break;
+			case 3:
+				$scope.dag.uren = $scope.prefs.we;
+				break;
+			case 4:
+				$scope.dag.uren = $scope.prefs.th;
+				break;
+			case 5:
+				$scope.dag.uren = $scope.prefs.vr;
+				break;
+			case 6:
+				$scope.dag.uren = $scope.prefs.sa;
+				break;
+			case 7:
+				$scope.dag.uren = $scope.prefs.su;
+				break;
+			default:
+				break;
+			}
+			break;
+		case 'M':
+			$scope.dag.soort = 'M';
+			break;
+		default:
+			$scope.dag.soort = 'K';
+			break;
+		}
+		CalenderService.savedag($scope.dag);
 	}
+	
+	$scope.savedag = function(){
+		$scope.dag.soort='K'
+		CalenderService.savedag($scope.dag);
+	}
+
 });

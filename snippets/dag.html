@@ -1,3 +1,13 @@
-<div ng-controller="dagCtrl" class="dagobj" ng-class="{outsidemonth: (dag.maand!=calender.currmonth)}">
-<span class="dagnr">{{dag.dag}}</span>
+<div 
+	ng-controller="dagCtrl" 
+	class="dagobj" 
+	ng-click="click()"
+	ng-class="{outsidemonth: (dag.maand!=calender.currmonth), vrij: (dag.dow==6 || dag.dow==7 || dag.uren==0.0 || dag.soort=='V'), thuis: (dag.soort=='T')}">
+	<span class="dagnr">{{dag.dag}}</span>
+	<span class="dagnr glyphicon glyphicon-home" ng-if="dag.soort=='T'"></span>
+	<br/>
+	<span class="uren" ng-if="dag.soort=='T' || dag.soort=='K'">{{dag.uren}}</span>
+	<form name="urenform" ng-submit="submitUur" class="form-uren" novalidate ng-if="dag.soort=='M'">
+		<input type="number" min="0" max="10" id="uren" ng-model="dag.uren" class="form-control" required ng-blur="savedag()" autofocus>
+	</form>
 </div>

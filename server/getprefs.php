@@ -7,6 +7,7 @@ if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 $data = NULL;
 $errors = array ();
 $username = trim ( $_SESSION [SESSION_USER]->username );
+setlocale(LC_ALL, 'nl_NL');
 
 try {
 	$sQuery = "SELECT * FROM ch_preferences WHERE user_name = ?";
@@ -18,7 +19,7 @@ try {
 	while ($stmt->fetch()){
 		$data = array('user_name'=>$username,
 				'phone'=>$phone,'team'=>$team,
-				'mo'=>$mo, 'tu'=>$tu, 'we'=>$we, 'th'=>$th, 'vr'=>$vr, 'sa'=>$sa, 'su'=>$su
+				'mo'=>(float)$mo, 'tu'=>(float)$tu, 'we'=>(float)$we, 'th'=>(float)$th, 'vr'=>(float)$vr, 'sa'=>(float)$sa, 'su'=>(float)$su
 		);
 	}
 	
@@ -39,5 +40,9 @@ if (count ( $errors ) > 0) {
 	);
 }
 echo json_encode ( $data );
+
+function format($number){
+	return number_format($number, 1, ',','');
+}
 
 ?>
