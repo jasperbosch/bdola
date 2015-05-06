@@ -44,11 +44,11 @@ $_SESSION [SESSION_MONTHYEAR] = $monthYear;
 $datum = getFistDayOfCalender ( $monthYear );
 $datumParam = $datum->format ( 'Y-m-d' );
 $clone = clone $datum;
-$datumTotParam = $clone->add ( new DateInterval ( 'P1M7D' ) )->format ( 'Y-m-d' ) ;
+$datumTotParam = $clone->add ( new DateInterval ( 'P1M7D' ) )->format ( 'Y-m-d' );
 
 $sQuery = "SELECT * FROM ch_data WHERE user_name = ? AND datum BETWEEN ? AND ?";
 $stmt = $mysqli->prepare ( $sQuery );
-$stmt->bind_param ( 'sss', $username, $datumParam, $datumTotParam);
+$stmt->bind_param ( 'sss', $username, $datumParam, $datumTotParam );
 $stmt->execute ();
 $stmt->bind_result ( $username, $datumValue, $soort, $uren, $timestamp );
 $chdata = array ();
@@ -69,8 +69,8 @@ while ( datumIsInDezeMaand ( $datum, $monthYear ) ) {
 		$dag->maand = intval ( $datum->format ( 'n' ) );
 		$dag->dow = intval ( $datum->format ( 'N' ) );
 		if (isset ( $chdata [$dag->datum] )) {
-			$dag->uren = ( float ) $chdata[$dag->datum]['uren'];
-			$dag->soort = $chdata[$dag->datum]['soort'];
+			$dag->uren = ( float ) $chdata [$dag->datum] ['uren'];
+			$dag->soort = $chdata [$dag->datum] ['soort'];
 		} else {
 			$dag->uren = ( float ) $prefs [$dag->dow];
 			if ($dag->uren == 0) {
@@ -108,15 +108,16 @@ function getFullMonth($date) {
 	return $date->format ( "F Y" );
 }
 function getFirstDayOfMonth($datum) {
-	return date ( "N", strtotime ( $datum . "-01" ) );
+	return $datum->format ( 'N' );
 }
 function getFistDayOfCalender($datum) {
-	$dag = intval ( getFirstDayOfMonth ( $datum->format ( 'Y-m' ) ) ) + 3;
+	$firstDayOfMonth = new DateTime ( $datum->format ( 'Y-m-01' ) );
+	$dag = intval ( getFirstDayOfMonth ( $firstDayOfMonth ) - 1 );
 	// echo var_dump($dag);
 	// if ($dag==0){
 	// $dag=7;
 	// }
-	$clone = clone $datum;
+	$clone = clone $firstDayOfMonth;
 	$clone->sub ( new DateInterval ( 'P' . $dag . 'D' ) );
 	return $clone;
 }
