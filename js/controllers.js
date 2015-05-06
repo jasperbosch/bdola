@@ -79,7 +79,6 @@ app.controller('ApplicationController', function($scope, AuthService,
 		};
 		$scope.setStuffAfterLogin();
 	}
-	$scope.init();
 	
 	$scope.setStuffAfterLogin = function(){
 		AuthService.loginstatus().then(function(user) {
@@ -110,6 +109,7 @@ app.controller('ApplicationController', function($scope, AuthService,
 			}
 		});
 	}
+	$scope.init();
 
 	// (scope.getCurrentUser()==null);
 
