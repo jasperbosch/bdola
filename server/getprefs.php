@@ -7,7 +7,6 @@ if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 $data = NULL;
 $errors = array ();
 $username = trim ( $_SESSION [SESSION_USER]->username );
-setlocale(LC_ALL, 'nl_NL');
 
 try {
 	$sQuery = "SELECT * FROM ch_preferences WHERE user_name = ?";

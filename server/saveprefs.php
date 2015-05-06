@@ -7,7 +7,6 @@ if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 $data = NULL;
 $postdata = file_get_contents ( "php://input" );
 $request = json_decode ( $postdata );
-setlocale(LC_ALL, 'nl_NL');
 
 // Forms posted
 if (! empty ( $request )) {

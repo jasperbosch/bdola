@@ -8,8 +8,7 @@ app.controller('LoginController', function($scope, $rootScope, AuthService) {
 			if (user.username !== undefined) {
 				// console.log("Login OK");
 				$scope.setCurrentUser(user);
-				// $scope.setLocatie(user.locatie);
-				// $scope.setCheckstate(user.checkstatus);
+				$scope.setStuffAfterLogin();
 				$scope.setAlerts([ {
 					type : 'success',
 					msg : "User logged in"
@@ -67,6 +66,22 @@ app.controller('ApplicationController', function($scope, AuthService,
 				$scope.setAlerts(result.data.error);
 			}
 		});
+		$scope.prefs = {
+			phone : '',
+			team : '',
+			mo : 8,
+			tu : 8,
+			we : 8,
+			th : 8,
+			vr : 8,
+			sa : 0,
+			su : 0
+		};
+		$scope.setStuffAfterLogin();
+	}
+	$scope.init();
+	
+	$scope.setStuffAfterLogin = function(){
 		AuthService.loginstatus().then(function(user) {
 			if (user !== undefined) {
 				$scope.setCurrentUser(user);
@@ -79,17 +94,6 @@ app.controller('ApplicationController', function($scope, AuthService,
 			$scope.check.checkstate = (result != "null");
 			$scope.check.locationname = result.locatienaam;
 		});
-		$scope.prefs = {
-			phone : '',
-			team : '',
-			mo : 8,
-			tu : 8,
-			we : 8,
-			th : 8,
-			vr : 8,
-			sa : 0,
-			su : 0
-		};
 		PrefsService.getprefs().then(function(result) {
 			if (result.data.error === undefined) {
 				$scope.prefs.phone = result.data.phone;
@@ -106,7 +110,6 @@ app.controller('ApplicationController', function($scope, AuthService,
 			}
 		});
 	}
-	$scope.init();
 
 	// (scope.getCurrentUser()==null);
 

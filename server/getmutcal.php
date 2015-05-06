@@ -40,7 +40,6 @@ if ($postdata == 0) {
 	$monthYear->add ( $monthInterval );
 }
 $_SESSION [SESSION_MONTHYEAR] = $monthYear;
-setlocale ( LC_ALL, 'nl_NL' );
 
 $datum = getFistDayOfCalender ( $monthYear );
 $datumParam = $datum->format ( 'Y-m-d' );
@@ -59,12 +58,6 @@ while ( $stmt->fetch () ) {
 			'uren' => $uren 
 	);
 }
-// echo $sQuery;
-// echo "|";
-// echo $datumParam;
-// echo "|";
-// echo $datumTotParam;
-// echo var_dump($chdata);
 
 $interval = new DateInterval ( 'P1D' );
 while ( datumIsInDezeMaand ( $datum, $monthYear ) ) {
