@@ -5,7 +5,7 @@ http://usercake.com
 */
 
 define('SESSION_USER','userCakeUser');
-setlocale ( LC_ALL, 'nl_NL' );
+setlocale ( LC_ALL, 'nl_NL', 'nld_NLD' );
 
 //Database Information
 // $db_host = "localhost"; //Host address (most likely localhost)

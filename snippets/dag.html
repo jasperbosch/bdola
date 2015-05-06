@@ -8,6 +8,6 @@
 	<br/>
 	<span class="uren" ng-if="dag.soort=='T' || dag.soort=='K'">{{dag.uren}}</span>
 	<form name="urenform" ng-submit="submitUur" class="form-uren" novalidate ng-if="dag.soort=='M'">
-		<input type="number" min="0" max="10" id="uren" ng-model="dag.uren" class="form-control" required ng-blur="savedag()" autofocus>
+		<input type="number" min="0" max="10" id="uren" ng-model="dag.uren" class="form-control" required ng-blur="savedag()" focus-me="dag.soort=='M'">
 	</form>
 </div>

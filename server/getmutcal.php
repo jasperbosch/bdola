@@ -105,7 +105,7 @@ function getCurrentMonth() {
 	return intval ( $date->format ( "n" ) );
 }
 function getFullMonth($date) {
-	return $date->format ( "F Y" );
+	return strftime( '%B %Y', strtotime($date->format ( "d-m-Y" )));
 }
 function getFirstDayOfMonth($datum) {
 	return $datum->format ( 'N' );

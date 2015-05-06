@@ -79,3 +79,7 @@ td.dag{
 		top:-10px;
 }
 .form-uren .form-control:focus{box-shadow:none;}
+
+.form-signin .form-control.bootstrap-select{padding:0;}
+.form-signin .form-control.bootstrap-select .selectpicker{padding:10px;}
+.form-signin .form-control.bootstrap-select .dropdown-menu.open{position:relative; }
