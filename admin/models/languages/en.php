@@ -118,4 +118,22 @@ $lang = array_merge($lang,array(
 	"CANNOT_DELETE_NEWUSERS"		=> "You cannot delete the default 'new user' group",
 	"CANNOT_DELETE_ADMIN"			=> "You cannot delete the default 'admin' group",
 	));
+
+//Location
+$lang = array_merge($lang,array(
+	"LOCATION_CHAR_LIMIT"			=> "Locatienaam moet tussen de %m1% en %m2% characters lang zijn",
+	"LOCATION_NAME_IN_USE"			=> "Locatienaam %m1% is al in gebruik",
+	"LOCATION_CREATION_SUCCESSFUL"	=> "Locatie succesvol opgeslagen op `%m1%`",
+	"LOCATION_NAME_UPDATE"			=> "Locatienaam gewijzigd in `%m1%`",
+	"LOCATION_DELETIONS_SUCCESSFUL"	=> "Er zijn succesvol %m1% locaties verwijderd",
+));
+//Team
+$lang = array_merge($lang,array(
+		"TEAM_CHAR_LIMIT"			=> "Teamnaam moet tussen de %m1% en %m2% characters lang zijn",
+		"TEAM_NAME_IN_USE"			=> "Teamnaam %m1% is al in gebruik",
+		"TEAM_CREATION_SUCCESSFUL"	=> "Team succesvol opgeslagen op `%m1%`",
+		"TEAM_NAME_UPDATE"			=> "Teamnaam gewijzigd in `%m1%`",
+		"TEAM_DELETIONS_SUCCESSFUL"	=> "Er zijn succesvol %m1% teams verwijderd",
+));
+
 ?>

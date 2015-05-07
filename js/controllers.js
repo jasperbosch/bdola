@@ -288,6 +288,10 @@ app.controller('dagCtrl', function($scope, CalenderService) {
 			$scope.dag.soort = 'T';
 			break;
 		case 'T':
+			$scope.dag.soort = 'C';
+			$scope.dag.uren = 0.0;
+			break;
+		case 'C':
 			$scope.dag.soort = 'V';
 			$scope.dag.uren = 0.0;
 			break;

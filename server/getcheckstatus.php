@@ -12,6 +12,7 @@ try {
 	foreach ($userData as $v1){
 		
 		$username = $v1['user_name'];
+		$displayname = $v1['display_name'];
 		
 		$sQuery = "SELECT a.user_name, a.phone, b.naam, b.rgb, d.locatie
 				FROM ch_preferences a 
@@ -29,7 +30,7 @@ try {
 		$stmt->bind_result($user,$phone,$naam,$rgb,$locatie);
 		
 		while ($stmt->fetch()){
-			array_push($data,array('user_name'=>$user,'phone'=>$phone,'naam'=>$naam,'rgb'=>$rgb,'locatie'=>$locatie));
+			array_push($data,array('displayname'=>$displayname,'phone'=>$phone,'naam'=>$naam,'rgb'=>$rgb,'locatie'=>$locatie));
 			break;
 		}
 		$stmt->close();

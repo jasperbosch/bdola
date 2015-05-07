@@ -304,6 +304,7 @@ function fetchAllUsers()
 	return ($row);
 }
 
+
 //Retrieve complete user information by username, token or ID
 function fetchUserDetails($username=NULL,$token=NULL, $id=NULL)
 {

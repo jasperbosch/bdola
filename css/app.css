@@ -61,16 +61,18 @@ td.dag{
 	 border:solid 1px green;
 }
 
-.dagobj{width:50px;height: 50px; background-color:navy;}
-.dagobj.vrij{background-color:gray;}
-.dagobj.thuis{background-color:blue;}
+.dagobj{width:50px;height: 50px; background-color:white;}
+.dagobj.thuis{background-color:yellow;}
+.dagobj.cursus{background-color:#00b0f0;}
+.dagobj.vrij{background-color:#92d050;}
+.dagobj.sprint{background-color:#ffc000;}
 .dagobj:hover{outline:1px solid cyan;cursor: pointer;}
 .dagobj.outsidemonth{background-color:silver;cursor: default;}
 
-.dagnr{color: #FFFFFF;
+.dagnr{color: gray;
     float: left;
     line-height: 19px;}
-.uren{color: #FFFF00;
+.uren{color: #000000;
     font-size: 23px;
     line-height: 23px;
     padding-left: 10px;}
@@ -83,3 +85,9 @@ td.dag{
 .form-signin .form-control.bootstrap-select{padding:0;}
 .form-signin .form-control.bootstrap-select .selectpicker{padding:10px;}
 .form-signin .form-control.bootstrap-select .dropdown-menu.open{position:relative; }
+
+
+@media (max-width: 480px) {
+.container{padding-left:1px;padding-right:1px;}
+.dagobj{width:44px;height: 44px;} 
+ }

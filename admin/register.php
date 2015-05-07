@@ -8,7 +8,7 @@ require_once("models/config.php");
 if (!securePage($_SERVER['PHP_SELF'])){die();}
 
 //Prevent the user visiting the logged in page if he/she is already logged in
-if(isUserLoggedIn()) { header("Location: account.php"); die(); }
+// if(isUserLoggedIn()) { header("Location: account.php"); die(); }
 
 //Forms posted
 if(!empty($_POST))
@@ -26,16 +26,16 @@ if(!empty($_POST))
 	{
 		$errors[] = lang("CAPTCHA_FAIL");
 	}
-	if(minMaxRange(5,25,$username))
+	if(minMaxRange(4,25,$username))
 	{
-		$errors[] = lang("ACCOUNT_USER_CHAR_LIMIT",array(5,25));
+		$errors[] = lang("ACCOUNT_USER_CHAR_LIMIT",array(4,25));
 	}
 	if(!ctype_alnum($username)){
 		$errors[] = lang("ACCOUNT_USER_INVALID_CHARACTERS");
 	}
-	if(minMaxRange(5,25,$displayname))
+	if(minMaxRange(4,25,$displayname))
 	{
-		$errors[] = lang("ACCOUNT_DISPLAY_CHAR_LIMIT",array(5,25));
+		$errors[] = lang("ACCOUNT_DISPLAY_CHAR_LIMIT",array(4,25));
 	}
 	if(!ctype_alnum($displayname)){
 		$errors[] = lang("ACCOUNT_DISPLAY_INVALID_CHARACTERS");
@@ -48,10 +48,10 @@ if(!empty($_POST))
 	{
 		$errors[] = lang("ACCOUNT_PASS_MISMATCH");
 	}
-	if(!isValidEmail($email))
-	{
-		$errors[] = lang("ACCOUNT_INVALID_EMAIL");
-	}
+// 	if(!isValidEmail($email))
+// 	{
+// 		$errors[] = lang("ACCOUNT_INVALID_EMAIL");
+// 	}
 	//End data validation
 	if(count($errors) == 0)
 	{	
@@ -63,7 +63,7 @@ if(!empty($_POST))
 		{
 			if($user->username_taken) $errors[] = lang("ACCOUNT_USERNAME_IN_USE",array($username));
 			if($user->displayname_taken) $errors[] = lang("ACCOUNT_DISPLAYNAME_IN_USE",array($displayname));
-			if($user->email_taken) 	  $errors[] = lang("ACCOUNT_EMAIL_IN_USE",array($email));		
+// 			if($user->email_taken) 	  $errors[] = lang("ACCOUNT_EMAIL_IN_USE",array($email));		
 		}
 		else
 		{

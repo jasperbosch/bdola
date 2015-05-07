@@ -23,6 +23,14 @@ if(isUserLoggedIn()) {
 	<li><a href='admin_users.php'>Admin Users</a></li>
 	<li><a href='admin_permissions.php'>Admin Permissions</a></li>
 	<li><a href='admin_pages.php'>Admin Pages</a></li>
+	<li><a href='register.php'>Register</a></li>
+	</ul>";
+	echo "
+	<ul>
+	<li><a href='checkin_locaties.php'>Locaties</a></li>
+	<li><a href='checkin_teams.php'>Teams</a></li>
+	<li><a href='checkin_sprintstarts.php'>Sprint starts</a></li>
+	<li><a href='checkin_vrijedagen.php'>Vrije dagen</a></li>
 	</ul>";
 	}
 } 
@@ -32,7 +40,6 @@ else {
 	<ul>
 	<li><a href='index.php'>Home</a></li>
 	<li><a href='login.php'>Login</a></li>
-	<li><a href='register.php'>Register</a></li>
 	<li><a href='forgot-password.php'>Forgot Password</a></li>";
 	if ($emailActivation)
 	{
