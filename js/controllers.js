@@ -67,8 +67,8 @@ app.controller('ApplicationController', function($scope, AuthService,
 			}
 		});
 		$scope.prefs = {
-			phone : '',
 			team : '',
+			functie : '',
 			mo : 8,
 			tu : 8,
 			we : 8,
@@ -79,8 +79,8 @@ app.controller('ApplicationController', function($scope, AuthService,
 		};
 		$scope.setStuffAfterLogin();
 	}
-	
-	$scope.setStuffAfterLogin = function(){
+
+	$scope.setStuffAfterLogin = function() {
 		AuthService.loginstatus().then(function(user) {
 			if (user !== undefined) {
 				$scope.setCurrentUser(user);
@@ -162,7 +162,7 @@ app.controller('ApplicationController', function($scope, AuthService,
 
 app.controller('CheckinCtrl', function($scope, CheckinService) {
 	$scope.init = function() {
-		//$("#menubutton").click();
+		// $("#menubutton").click();
 	}
 	$scope.init();
 
@@ -220,9 +220,17 @@ app.controller('StsOvzCtrl', function($scope, $compile, CheckinService) {
 
 });
 
-app.controller('AfwOvzCtrl', function($scope, $compile) {
+app.controller('AfwOvzCtrl', function($scope, $compile, SprintService) {
+	$scope.data;
 	$scope.init = function() {
-		//$("#menubutton").click();
+		SprintService.getOverzicht().then(function(result){
+			if (result.error == undefined){
+				$scope.data = result.data;
+			} else {
+				$scope.setAlerts(result.error);
+			}
+			
+		});
 	}
 	$scope.init();
 
@@ -232,7 +240,7 @@ app.controller('AfwMutCtrl', function($scope, $compile, CalenderService) {
 	$scope.calender;
 
 	$scope.init = function() {
-		//$("#menubutton").click();
+		// $("#menubutton").click();
 		CalenderService.getMutCal(0).then(function(result) {
 			$scope.calender = result.data;
 		});
@@ -254,10 +262,10 @@ app.controller('AfwMutCtrl', function($scope, $compile, CalenderService) {
 });
 
 app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
-//	$scope.prefs;
+	// $scope.prefs;
 
 	$scope.initPrefs = function() {
-		//$("#menubutton").click();
+		// $("#menubutton").click();
 	}
 	$scope.initPrefs();
 
@@ -281,46 +289,62 @@ app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
 app.controller('dagCtrl', function($scope, CalenderService) {
 
 	$scope.dag;
-
+	
 	$scope.click = function() {
 		switch ($scope.dag.soort) {
 		case 'K':
 			$scope.dag.soort = 'T';
 			break;
+		case 'S':
 		case 'T':
 			$scope.dag.soort = 'C';
 			$scope.dag.uren = 0.0;
 			break;
 		case 'C':
+			if ($scope.currentUser.displayname=='Jasper'){
+				// Speciaal(alleen) voor Jasper(mij) een DHN status. 
+				$scope.dag.soort = 'D';
+			} else {
+				$scope.dag.soort = 'V';
+			}
+			$scope.dag.uren = 0.0;
+			break;
+		case 'D':
 			$scope.dag.soort = 'V';
 			$scope.dag.uren = 0.0;
 			break;
 		case 'V':
-			$scope.dag.soort = 'M';
-			switch ($scope.dag.dow) {
-			case 1:
-				$scope.dag.uren = $scope.prefs.mo;
-				break;
-			case 2:
-				$scope.dag.uren = $scope.prefs.tu;
-				break;
-			case 3:
-				$scope.dag.uren = $scope.prefs.we;
-				break;
-			case 4:
-				$scope.dag.uren = $scope.prefs.th;
-				break;
-			case 5:
-				$scope.dag.uren = $scope.prefs.vr;
-				break;
-			case 6:
-				$scope.dag.uren = $scope.prefs.sa;
-				break;
-			case 7:
-				$scope.dag.uren = $scope.prefs.su;
-				break;
-			default:
-				break;
+			if ($scope.dag.isVerplichtVrij){
+				// niets doen
+			} else if ($scope.dag.isSprintstart) {
+				$scope.dag.soort = 'S';
+			} else {
+				$scope.dag.soort = 'M';
+				switch ($scope.dag.dow) {
+				case 1:
+					$scope.dag.uren = $scope.prefs.mo;
+					break;
+				case 2:
+					$scope.dag.uren = $scope.prefs.tu;
+					break;
+				case 3:
+					$scope.dag.uren = $scope.prefs.we;
+					break;
+				case 4:
+					$scope.dag.uren = $scope.prefs.th;
+					break;
+				case 5:
+					$scope.dag.uren = $scope.prefs.vr;
+					break;
+				case 6:
+					$scope.dag.uren = $scope.prefs.sa;
+					break;
+				case 7:
+					$scope.dag.uren = $scope.prefs.su;
+					break;
+				default:
+					break;
+				}
 			}
 			break;
 		case 'M':
@@ -332,9 +356,9 @@ app.controller('dagCtrl', function($scope, CalenderService) {
 		}
 		CalenderService.savedag($scope.dag);
 	}
-	
-	$scope.savedag = function(){
-		$scope.dag.soort='K'
+
+	$scope.savedag = function() {
+		$scope.dag.soort = 'K'
 		CalenderService.savedag($scope.dag);
 	}
 

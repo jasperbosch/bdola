@@ -64,10 +64,13 @@ td.dag{
 .dagobj{width:50px;height: 50px; background-color:white;}
 .dagobj.thuis{background-color:yellow;}
 .dagobj.cursus{background-color:#00b0f0;}
+.dagobj.dhn{background-color:green;}
 .dagobj.vrij{background-color:#92d050;}
 .dagobj.sprint{background-color:#ffc000;}
+.dagobj.weekend{background-color:silver;}
 .dagobj:hover{outline:1px solid cyan;cursor: pointer;}
 .dagobj.outsidemonth{background-color:silver;cursor: default;}
+
 
 .dagnr{color: gray;
     float: left;
@@ -80,14 +83,31 @@ td.dag{
 		position: relative;
 		top:-10px;
 }
+
+.ovz th, .ovz td{border:solid 1px gray;}
+.ovz th{text-align: center;}
+.ovz td{padding: 0 5px;}
+.ovz .dagobj{width:40px;height:20px;text-align: center;}
+.ovz .uren{font-size: 12px; line-height: inherit; padding:0;}
+.ovz .thuis{font-size: xx-small;}
+.ovz .goed{background-color:#04B45F;text-align: center;font-weight: bold;}
+.ovz .fout{background-color:red;text-align: center;font-weight: bold;}
+
 .form-uren .form-control:focus{box-shadow:none;}
 
 .form-signin .form-control.bootstrap-select{padding:0;}
 .form-signin .form-control.bootstrap-select .selectpicker{padding:10px;}
 .form-signin .form-control.bootstrap-select .dropdown-menu.open{position:relative; }
 
+.afwmut{margin: 0 auto;
+    max-width: 357px;}
+
+
+.totteam{float:left; margin-right:10px;margin-top:20px;}
+.totteam th, .totteam td{border:solid 1px gray;}
+.totteam th{padding: 0 5px;}
+.totteam td{text-align: right;}
 
 @media (max-width: 480px) {
-.container{padding-left:1px;padding-right:1px;}
 .dagobj{width:44px;height: 44px;} 
  }

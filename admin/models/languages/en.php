@@ -129,11 +129,29 @@ $lang = array_merge($lang,array(
 ));
 //Team
 $lang = array_merge($lang,array(
-		"TEAM_CHAR_LIMIT"			=> "Teamnaam moet tussen de %m1% en %m2% characters lang zijn",
+		"SPRINT_CHAR_LIMIT"			=> "Teamnaam moet tussen de %m1% en %m2% characters lang zijn",
 		"TEAM_NAME_IN_USE"			=> "Teamnaam %m1% is al in gebruik",
 		"TEAM_CREATION_SUCCESSFUL"	=> "Team succesvol opgeslagen op `%m1%`",
 		"TEAM_NAME_UPDATE"			=> "Teamnaam gewijzigd in `%m1%`",
 		"TEAM_DELETIONS_SUCCESSFUL"	=> "Er zijn succesvol %m1% teams verwijderd",
+));
+
+//Sprint
+$lang = array_merge($lang,array(
+		"SPRINT_CHAR_LIMIT"				=> "Sprintnaam moet tussen de %m1% en %m2% characters lang zijn",
+		"SPRINT_NAME_IN_USE"			=> "Sprintnaam %m1% is al in gebruik",
+		"SPRINT_CREATION_SUCCESSFUL"	=> "Sprint succesvol opgeslagen op `%m1%`",
+		"SPRINT_NAME_UPDATE"			=> "Sprintnaam gewijzigd in `%m1%`",
+		"SPRINT_DELETIONS_SUCCESSFUL"	=> "Er zijn succesvol %m1% sprints verwijderd",
+));
+
+//Vrijedagen
+$lang = array_merge($lang,array(
+		"VRIJEDAGEN_CHAR_LIMIT"				=> "Datum moet tussen de %m1% en %m2% characters lang zijn",
+		"VRIJEDAGEN_NAME_IN_USE"			=> "Datum %m1% is al in gebruik",
+		"VRIJEDAGEN_CREATION_SUCCESSFUL"	=> "Datum succesvol opgeslagen op `%m1%`",
+		"VRIJEDAGEN_NAME_UPDATE"			=> "Datum gewijzigd in `%m1%`",
+		"VRIJEDAGEN_DELETIONS_SUCCESSFUL"	=> "Er zijn succesvol %m1% datums verwijderd",
 ));
 
 ?>

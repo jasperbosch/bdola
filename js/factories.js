@@ -136,3 +136,17 @@ app.factory('CalenderService', function($http){
 	
 	return calenderService;
 })
+
+app.factory('SprintService', function($http){
+	var sprintService = {};
+	
+	sprintService.getOverzicht = function(datum){
+		return $http.post('server/getsprintovz.php',datum).then(
+				function(result){
+					return result;
+				}
+				);
+	}
+	
+	return sprintService;
+})

@@ -22,20 +22,20 @@ if(!empty($_POST))
 	$captcha = md5($_POST["captcha"]);
 	
 	
-	if ($captcha != $_SESSION['captcha'])
+// 	if ($captcha != $_SESSION['captcha'])
+// 	{
+// 		$errors[] = lang("CAPTCHA_FAIL");
+// 	}
+	if(minMaxRange(3,25,$username))
 	{
-		$errors[] = lang("CAPTCHA_FAIL");
-	}
-	if(minMaxRange(4,25,$username))
-	{
-		$errors[] = lang("ACCOUNT_USER_CHAR_LIMIT",array(4,25));
+		$errors[] = lang("ACCOUNT_USER_CHAR_LIMIT",array(3,25));
 	}
 	if(!ctype_alnum($username)){
 		$errors[] = lang("ACCOUNT_USER_INVALID_CHARACTERS");
 	}
-	if(minMaxRange(4,25,$displayname))
+	if(minMaxRange(3,25,$displayname))
 	{
-		$errors[] = lang("ACCOUNT_DISPLAY_CHAR_LIMIT",array(4,25));
+		$errors[] = lang("ACCOUNT_DISPLAY_CHAR_LIMIT",array(3,25));
 	}
 	if(!ctype_alnum($displayname)){
 		$errors[] = lang("ACCOUNT_DISPLAY_INVALID_CHARACTERS");

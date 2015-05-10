@@ -16,7 +16,7 @@ $sQuery = "SELECT * FROM ch_preferences WHERE user_name = ?";
 $stmt = $mysqli->prepare ( $sQuery );
 $stmt->bind_param ( 's', $username );
 $stmt->execute ();
-$stmt->bind_result ( $username, $phone, $team, $mo, $tu, $we, $th, $vr, $sa, $su, $timestamp );
+$stmt->bind_result ( $username, $phone, $functie, $team, $mo, $tu, $we, $th, $vr, $sa, $su, $timestamp );
 while ( $stmt->fetch () ) {
 	$prefs [1] = $mo;
 	$prefs [2] = $tu;
@@ -45,6 +45,7 @@ $datum = getFistDayOfCalender ( $monthYear );
 $datumParam = $datum->format ( 'Y-m-d' );
 $clone = clone $datum;
 $datumTotParam = $clone->add ( new DateInterval ( 'P1M7D' ) )->format ( 'Y-m-d' );
+$spDatumTotParam = $clone->add ( new DateInterval ( 'P1M8D' ) )->format ( 'Y-m-d' );
 
 $sQuery = "SELECT * FROM ch_data WHERE user_name = ? AND datum BETWEEN ? AND ?";
 $stmt = $mysqli->prepare ( $sQuery );
@@ -59,6 +60,31 @@ while ( $stmt->fetch () ) {
 	);
 }
 
+$sQuery = "SELECT * FROM ch_sprints WHERE datum BETWEEN ? AND ?";
+$stmt = $mysqli->prepare ( $sQuery );
+$stmt->bind_param ( 'ss', $datumParam, $spDatumTotParam );
+$stmt->execute ();
+$stmt->bind_result ( $id, $naam, $datumValue, $timestamp );
+$spdata = array ();
+while ( $stmt->fetch () ) {
+	$spdata [$datumValue] = array (
+			'naam' => $naam,
+			'datum' => $datumValue 
+	);
+}
+
+$sQuery = "SELECT * FROM ch_vrijedagen WHERE datum BETWEEN ? AND ?";
+$stmt = $mysqli->prepare ( $sQuery );
+$stmt->bind_param ( 'ss', $datumParam, $datumTotParam );
+$stmt->execute ();
+$stmt->bind_result ( $datumValue, $timestamp );
+$vrdata = array ();
+while ( $stmt->fetch () ) {
+	$vrdata [$datumValue] = array (
+			'datum' => $datumValue 
+	);
+}
+
 $interval = new DateInterval ( 'P1D' );
 while ( datumIsInDezeMaand ( $datum, $monthYear ) ) {
 	$week = array ();
@@ -69,8 +95,17 @@ while ( datumIsInDezeMaand ( $datum, $monthYear ) ) {
 		$dag->maand = intval ( $datum->format ( 'n' ) );
 		$dag->dow = intval ( $datum->format ( 'N' ) );
 		if (isset ( $chdata [$dag->datum] )) {
+			// Mutatie van de gebruiker
 			$dag->uren = ( float ) $chdata [$dag->datum] ['uren'];
 			$dag->soort = $chdata [$dag->datum] ['soort'];
+		} elseif (isset ( $vrdata [$dag->datum] )) {
+			// Verplichte vrije dag
+			$dag->uren = 0;
+			$dag->soort = 'V';
+		} elseif (isset ( $spdata [$dag->datum] )) {
+			// Sprint start
+			$dag->uren = 0;
+			$dag->soort = 'S';
 		} else {
 			$dag->uren = ( float ) $prefs [$dag->dow];
 			if ($dag->uren == 0) {
@@ -79,6 +114,8 @@ while ( datumIsInDezeMaand ( $datum, $monthYear ) ) {
 				$dag->soort = 'K';
 			}
 		}
+		$dag->isSprintstart = (isset ( $spdata [$dag->datum]));
+		$dag->isVerplichtVrij = (isset ( $vrdata [$dag->datum]));
 		$week [] = $dag;
 		$datum->add ( $interval );
 	}
@@ -105,7 +142,7 @@ function getCurrentMonth() {
 	return intval ( $date->format ( "n" ) );
 }
 function getFullMonth($date) {
-	return strftime( '%B %Y', strtotime($date->format ( "d-m-Y" )));
+	return strftime ( '%B %Y', strtotime ( $date->format ( "d-m-Y" ) ) );
 }
 function getFirstDayOfMonth($datum) {
 	return $datum->format ( 'N' );

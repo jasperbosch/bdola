@@ -4,9 +4,12 @@ UserCake Version: 2.0.2
 http://usercake.com
 */
 
+define('SESSION_USER','userCakeUser');
+setlocale ( LC_ALL, 'nl_NL', 'nld_NLD' );
+
 //Database Information
 // $db_host = "localhost"; //Host address (most likely localhost)
-// $db_name = "usercake"; //Name of Database
+// $db_name = "checkin"; //Name of Database
 // $db_user = "sqluser"; //Name of database user
 // $db_pass = "sqluser"; //Password for database user
 // $db_table_prefix = "uc_";

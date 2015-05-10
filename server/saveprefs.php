@@ -12,8 +12,8 @@ $request = json_decode ( $postdata );
 if (! empty ( $request )) {
 	$errors = array ();
 	$username = trim ( $_SESSION [SESSION_USER]->username );
-	$phone = trim ( $request->phone );
 	$team = $request->team;
+	$functie = $request->functie;
 	$mo = $request->mo;
 	$tu = $request->tu;
 	$we = $request->we;
@@ -40,17 +40,17 @@ if (! empty ( $request )) {
 		if ($result < 0) {
 			// Er was nog geen record, dus INSERT
 			$sQuery = "INSERT INTO ch_preferences (
-            	user_name,phone,team,mo,tu,we,th,vr,sa,su
+            	user_name,team,functie,mo,tu,we,th,vr,sa,su
         	) VALUES (
             	?,?,?,?,?,?,?,?,?,?
         	)";
 			$stmt = $mysqli->prepare ( $sQuery );
-			$stmt->bind_param ( 'ssiddddddd', $username, $phone, $team , $mo, $tu, $we, $th, $vr, $sa, $su);
+			$stmt->bind_param ( 'sisddddddd', $username, $team, $functie, $mo, $tu, $we, $th, $vr, $sa, $su );
 		} else {
 			// Er was al wel een record, dus UPDATE
 			$sQuery = "UPDATE ch_preferences SET
-				phone = ?,
 				team = ?,
+				functie = ?,
 				mo = ?,
 				tu = ?,
 				we = ?,
@@ -60,7 +60,7 @@ if (! empty ( $request )) {
 				su = ?
         	WHERE user_name = ?";
 			$stmt = $mysqli->prepare ( $sQuery );
-			$stmt->bind_param ( 'siddddddds', $phone, $team, $mo, $tu, $we, $th, $vr, $sa, $su, $username );
+			$stmt->bind_param ( 'sisddddddds', $phone, $team, $functie, $mo, $tu, $we, $th, $vr, $sa, $su, $username );
 		}
 		
 		$stmt->execute ();

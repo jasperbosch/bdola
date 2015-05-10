@@ -14,14 +14,22 @@ try {
 	$stmt = $mysqli->prepare ( $sQuery );
 	$stmt->bind_param ( 's', $username );
 	$stmt->execute ();
-	$stmt->bind_result($username,$phone,$team,$mo, $tu, $we, $th, $vr, $sa, $su, $timestamp);
-	while ($stmt->fetch()){
-		$data = array('user_name'=>$username,
-				'phone'=>$phone,'team'=>$team,
-				'mo'=>(float)$mo, 'tu'=>(float)$tu, 'we'=>(float)$we, 'th'=>(float)$th, 'vr'=>(float)$vr, 'sa'=>(float)$sa, 'su'=>(float)$su
+	$stmt->bind_result ( $username, $phone, $team, $functie, $mo, $tu, $we, $th, $vr, $sa, $su, $timestamp );
+	while ( $stmt->fetch () ) {
+		$data = array (
+				'user_name' => $username,
+				'phone' => $phone,
+				'team' => $team,
+				'functie' => $functie,
+				'mo' => ( float ) $mo,
+				'tu' => ( float ) $tu,
+				'we' => ( float ) $we,
+				'th' => ( float ) $th,
+				'vr' => ( float ) $vr,
+				'sa' => ( float ) $sa,
+				'su' => ( float ) $su 
 		);
 	}
-	
 } catch ( Exception $e ) {
 	$sMsg = 'Regelnummer: ' . $e->getLine () . '
 		Bestand: ' . $e->getFile () . '
@@ -39,9 +47,8 @@ if (count ( $errors ) > 0) {
 	);
 }
 echo json_encode ( $data );
-
-function format($number){
-	return number_format($number, 1, ',','');
+function format($number) {
+	return number_format ( $number, 1, ',', '' );
 }
 
 ?>

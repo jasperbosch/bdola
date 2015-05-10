@@ -39,7 +39,7 @@ if(!empty($_POST)){
 			$rgb = trim($_POST['rgb']);
 			
 			//Validate new name
-			if (teamNameExists($naam)){
+			if (teamNameExists($naam) && $teamDetails['rgb'] == $_POST['rgb']){
 				$errors[] = lang("TEAM_NAME_IN_USE", array($naam));
 			}
 			elseif (minMaxRange(1, 50, $naam)){

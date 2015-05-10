@@ -39,10 +39,10 @@ class User
 		{
 			$this->displayname_taken = true;
 		}
-		else if(emailExists($this->clean_email))
-		{
-			$this->email_taken = true;
-		}
+// 		else if(emailExists($this->clean_email))
+// 		{
+// 			$this->email_taken = true;
+// 		}
 		else
 		{
 			//No problems have been found.

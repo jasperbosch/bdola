@@ -8,10 +8,21 @@
 			</div> -->
 			
 			<div class="input-group">
-				<label for="username" class="sr-only">Team:</label> 
+				<label for="team" class="sr-only">Team:</label> 
     			<span class="input-group-addon glyphicon glyphicon-globe"></span>
 				<select selectpicker data-ng-model="prefs.team" ng-options="team.id as team.naam for team in teams" class="form-control">
     	             <option value="">Kies een team...</option>
+        	     </select>
+             </div>
+             
+             <div class="input-group">
+				<label for="functie" class="sr-only">Functie:</label> 
+    			<span class="input-group-addon glyphicon glyphicon-tags"></span>
+				<select selectpicker data-ng-model="prefs.functie" class="form-control">
+    	             <option value="">Kies een functie...</option>
+    	             <option >Ontwerper</option>
+    	             <option >Bouwer</option>
+    	             <option >Tester</option>
         	     </select>
              </div>
              
