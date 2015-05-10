@@ -2,7 +2,11 @@
 <h2>Afwezigheidsoverzicht</h2>
 
 <h3>Sprint: {{data.currSprint.naam}}</h3>
-
+<div class="btn-group" role="group" aria-label="...">
+  <button type="button" class="btn btn-default" ng-click="prev()" ng-if="data.prevSprint.datum!=null">Vorige</button>
+  <button type="button" class="btn btn-default" ng-click="init()">Huidige</button>
+  <button type="button" class="btn btn-default" ng-click="next()" ng-if="data.nextSprint.datum!=null">Volgende</button>
+</div>
 <table class="ovz">
 	<thead>
 		<tr>

@@ -84,6 +84,7 @@ td.dag{
 		top:-10px;
 }
 
+.ovz {margin-top:20px;}
 .ovz th, .ovz td{border:solid 1px gray;}
 .ovz th{text-align: center;}
 .ovz td{padding: 0 5px;}

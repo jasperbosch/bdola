@@ -6,7 +6,11 @@ if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 define ( 'SESSION_MONTHYEAR', 'monthYear' );
 $postdata = file_get_contents ( "php://input" );
 
-$currentDate = getCurrentDate ()->format ( 'Y-m-d' );
+	$currentDate = getCurrentDate ()->format ( 'Y-m-d' );
+if (trim($postdata)!=""){
+	$currentDate = $postdata;
+}
+
 // Bepaal de huidige sprint
 $sQuery = "SELECT naam, datum FROM ch_sprints WHERE datum <= ? ORDER BY datum DESC LIMIT 1";
 

@@ -233,6 +233,19 @@ app.controller('AfwOvzCtrl', function($scope, $compile, SprintService) {
 		});
 	}
 	$scope.init();
+	
+	$scope.prev = function() {
+		SprintService.getOverzicht($scope.data.prevSprint.datum).then(function(result) {
+			$scope.data = result.data;
+		});
+	}
+
+	$scope.next = function() {
+		SprintService.getOverzicht($scope.data.nextSprint.datum).then(function(result) {
+			$scope.data = result.data;
+		});
+	}
+
 
 });
 
