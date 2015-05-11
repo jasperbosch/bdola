@@ -2,12 +2,18 @@
 <h2>Statusoverzicht</h2>
 {{scope.data}}
 <div class="row">
-<div ng-repeat="(key, value) in data | groupBy: 'naam'" class="col-xs-12 col-sm-3">
-	<h3>Team: {{key}}</h3>
-	<div ng-repeat="checkin in value" style="border:solid 1px {{checkin.rgb}};">
+<div ng-repeat="(key, value) in data | groupBy: 'naam'" class="col-xs-12 col-sm-3" >
+	<div class="panel panel-default">
+	<div class="panel-heading">
+	<h3 >Team: {{key}}</h3>
+	</div>
+	<div class="panel-body">
+	<div ng-repeat="checkin in value" ng-style="{color:checkin.rgb};" >
 		<h4>{{checkin.displayname}}<small>@{{checkin.locatie}}</small></h4> 
 		<!-- <a href="tel:{{checkin.phone}}">{{checkin.phone}}</a> -->
 	</div>
+	</div>
+</div>
 </div>
 </div>
 </div>

@@ -26,7 +26,7 @@
 	</thead>
 	<tbody>
 		<tr ng-repeat="user in data.users">
-			<td style="color:{{user.rgb}}">{{user.team}}</td>
+			<td ng-style="{color:user.rgb}">{{user.team}}</td>
 			<td>{{user.naam}}</td>
 			<td 
 				class="dagobj"
@@ -54,7 +54,7 @@
 
 <table ng-repeat="team in data.totaalTeam" class="totteam">
 	<tr>
-		<th colspan= "2" style="color:{{team.rgb}}">{{team.naam}}</th>
+		<th colspan= "2" ng-style="{color: team.rgb}">{{team.naam}}</th>
 	</tr>
 	<tr ng-if="team.Ontwerper!=null">
 		<th>O</th>
@@ -63,6 +63,10 @@
 	<tr ng-if="team.Bouwer!=null">
 		<th>B</th>
 		<td>{{team.Bouwer}}</td>
+	</tr>
+	<tr ng-if="team.LeadBouwer!=null">
+		<th>LB</th>
+		<td>{{team.LeadBouwer}}</td>
 	</tr>
 	<tr ng-if="team.Tester!=null">
 		<th>T</th>

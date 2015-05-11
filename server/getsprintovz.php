@@ -80,6 +80,21 @@ while ( $stmt->fetch () ) {
 }
 $stmt->close ();
 
+// Bepaal alle vrije datums
+$sQuery = "SELECT datum
+		FROM ch_vrijedagen
+		WHERE datum BETWEEN ? AND ?";
+
+$stmt = $mysqli->prepare ( $sQuery );
+$stmt->bind_param ( 'ss', $currentSprint ['datum'], $nextSprint ['datum'] );
+$stmt->execute ();
+$stmt->bind_result ( $datum);
+$vrijdata = array ();
+while ( $stmt->fetch () ) {
+	$vrijdata [$datum]  = $datum;
+}
+$stmt->close ();
+
 // Bepaal de users
 $sQuery = "SELECT a.user_name, a.display_name, c.naam, c.rgb, b.mo, b.tu, b.we, b.th, b.vr, b.sa, b.su, b.functie
 		FROM uc_users a
@@ -87,7 +102,7 @@ $sQuery = "SELECT a.user_name, a.display_name, c.naam, c.rgb, b.mo, b.tu, b.we, 
 			ON b.user_name = a.user_name
 		LEFT JOIN ch_teams c
 			ON c.id = b.team
-		ORDER BY a.display_name ASC";
+		ORDER BY c.naam, a.display_name ASC";
 
 $stmt = $mysqli->prepare ( $sQuery );
 $stmt->execute ();
@@ -112,7 +127,7 @@ while ( $stmt->fetch () ) {
 			'naam' => $userName,
 			'team' => $team,
 			'rgb' => $rgb,
-			'data' => getData ( $startDate, $endDate, $prefs, $afwdata, $userId, $functie, $team, $rgb ) 
+			'data' => getData ( $startDate, $endDate, $prefs, $afwdata, $userId, $functie, $team, $rgb , $vrijdata) 
 	);
 	$users [] = $user;
 }
@@ -128,7 +143,7 @@ $data = array (
 );
 
 echo json_encode ( $data );
-function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $team, $rgb) {
+function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $team, $rgb, $vrijdata) {
 	global $totAanwezig, $totTeam;
 	$interval = new DateInterval ( 'P1D' );
 	$datum = clone $startDate;
@@ -172,6 +187,10 @@ function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $t
 		if (isset ( $afwdata [$dag->datum] [$userName] )) {
 			$dag->soort = $afwdata [$dag->datum] [$userName]->soort;
 			$dag->uren = $afwdata [$dag->datum] [$userName]->uren;
+		}
+		if (isset($vrijdata[$dag->datum])){
+			$dag->soort = "V";
+			$dag->uren = 0;
 		}
 		if ($dag->soort == "K" && $dag->uren == 0) {
 			$dag->soort = "V";

@@ -60,7 +60,7 @@ if (! empty ( $request )) {
 				su = ?
         	WHERE user_name = ?";
 			$stmt = $mysqli->prepare ( $sQuery );
-			$stmt->bind_param ( 'sisddddddds', $phone, $team, $functie, $mo, $tu, $we, $th, $vr, $sa, $su, $username );
+			$stmt->bind_param ( 'isddddddds', $team, $functie, $mo, $tu, $we, $th, $vr, $sa, $su, $username );
 		}
 		
 		$stmt->execute ();

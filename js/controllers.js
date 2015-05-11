@@ -95,7 +95,7 @@ app.controller('ApplicationController', function($scope, AuthService,
 		});
 		PrefsService.getprefs().then(function(result) {
 			if (result.data.error === undefined) {
-				$scope.prefs.phone = result.data.phone;
+				$scope.prefs.functie = result.data.functie;
 				$scope.prefs.team = result.data.team;
 				$scope.prefs.mo = result.data.mo;
 				$scope.prefs.tu = result.data.tu;
