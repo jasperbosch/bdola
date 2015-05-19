@@ -154,4 +154,13 @@ $lang = array_merge($lang,array(
 		"VRIJEDAGEN_DELETIONS_SUCCESSFUL"	=> "Er zijn succesvol %m1% datums verwijderd",
 ));
 
+//Config
+$lang = array_merge($lang,array(
+		"CONFIG_CHAR_LIMIT"				=> "Config moet tussen de %m1% en %m2% characters lang zijn",
+		"CONFIG_NAME_IN_USE"			=> "Config %m1% is al in gebruik",
+		"CONFIG_CREATION_SUCCESSFUL"	=> "Config succesvol opgeslagen op `%m1%`",
+		"CONFIG_NAME_UPDATE"			=> "Config gewijzigd in `%m1%`",
+		"CONFIG_DELETIONS_SUCCESSFUL"	=> "Er zijn succesvol %m1% configs verwijderd",
+));
+
 ?>

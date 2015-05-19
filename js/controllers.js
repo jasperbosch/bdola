@@ -1,8 +1,16 @@
-app.controller('LoginController', function($scope, $rootScope, AuthService) {
+app.controller('LoginController', function($scope, $rootScope, $location,
+		AuthService) {
 	$scope.credentials = {
 		username : '',
 		password : ''
 	};
+	$scope.init = function() {
+		if ($scope.currentUser != null) {
+			$location.path("/afwovz");
+		}
+	}
+	$scope.init();
+
 	$scope.login = function(credentials) {
 		AuthService.login(credentials).then(function(user) {
 			if (user.username !== undefined) {
@@ -13,6 +21,7 @@ app.controller('LoginController', function($scope, $rootScope, AuthService) {
 					type : 'success',
 					msg : "User logged in"
 				} ]);
+				$location.path("/afwovz");
 			} else {
 				// console.log("Login NOK");
 				$scope.setAlerts(user);
@@ -38,7 +47,7 @@ app.controller('LoginController', function($scope, $rootScope, AuthService) {
 })
 
 app.controller('ApplicationController', function($scope, AuthService,
-		CheckinService, PrefsService) {
+		CheckinService, PrefsService, $location) {
 	$scope.currentUser = null;
 	$scope.isAuthorized = AuthService.isAuthorized;
 	$scope.teams;
@@ -112,6 +121,10 @@ app.controller('ApplicationController', function($scope, AuthService,
 	$scope.init();
 
 	// (scope.getCurrentUser()==null);
+	$scope.resetCurrentUser = function(){
+		$scope.setCurrentUser(null);
+		$location.path("/login");
+	}
 
 	$scope.setCurrentUser = function(user) {
 		$scope.currentUser = user;
@@ -170,6 +183,7 @@ app.controller('CheckinCtrl', function($scope, CheckinService) {
 		CheckinService.checkin($scope.check).then(function(res) {
 			if (res.error !== undefined) {
 				$scope.setAlerts(res.error);
+				$scope.resetCurrentUser();
 			} else {
 				$scope.check.locationname = res.locatie;
 				$scope.check.checkstate = true;
@@ -181,6 +195,7 @@ app.controller('CheckinCtrl', function($scope, CheckinService) {
 		CheckinService.checkout().then(function(res) {
 			if (res !== undefined) {
 				$scope.setAlerts(res.error);
+				$scope.resetCurrentUser();
 			} else {
 				$scope.check.locationname = '';
 				$scope.check.checkstate = false;
@@ -213,6 +228,7 @@ app.controller('StsOvzCtrl', function($scope, $compile, CheckinService) {
 				$scope.data = result;
 			} else {
 				$scope.setAlerts(result.error);
+				$scope.resetCurrentUser();
 			}
 		});
 	};
@@ -223,52 +239,78 @@ app.controller('StsOvzCtrl', function($scope, $compile, CheckinService) {
 app.controller('AfwOvzCtrl', function($scope, $compile, SprintService) {
 	$scope.data;
 	$scope.init = function() {
-		SprintService.getOverzicht().then(function(result){
-			if (result.error == undefined){
+		SprintService.getOverzicht().then(function(result) {
+			if (result.data.error == undefined) {
 				$scope.data = result.data;
 			} else {
-				$scope.setAlerts(result.error);
+				$scope.setAlerts(result.data.error);
+				$scope.resetCurrentUser();
 			}
-			
 		});
 	}
 	$scope.init();
-	
+
 	$scope.prev = function() {
-		SprintService.getOverzicht($scope.data.prevSprint.datum).then(function(result) {
-			$scope.data = result.data;
-		});
+		SprintService.getOverzicht($scope.data.prevSprint.datum).then(
+				function(result) {
+					if (result.data.error == undefined) {
+						$scope.data = result.data;
+					} else {
+						$scope.setAlerts(result.data.error);
+						$scope.resetCurrentUser();
+					}
+				});
 	}
 
 	$scope.next = function() {
-		SprintService.getOverzicht($scope.data.nextSprint.datum).then(function(result) {
-			$scope.data = result.data;
-		});
+		SprintService.getOverzicht($scope.data.nextSprint.datum).then(
+				function(result) {
+					if (result.data.error == undefined) {
+						$scope.data = result.data;
+					} else {
+						$scope.setAlerts(result.data.error);
+						$scope.resetCurrentUser();
+					}
+				});
 	}
-
 
 });
 
-app.controller('AfwMutCtrl', function($scope, $compile, CalenderService) {
+app.controller('AfwMutCtrl', function($scope, $compile, CalenderService, $location) {
 	$scope.calender;
 
 	$scope.init = function() {
 		// $("#menubutton").click();
 		CalenderService.getMutCal(0).then(function(result) {
-			$scope.calender = result.data;
+			if (result.data.error == undefined) {
+				$scope.calender = result.data;
+			} else {
+				$scope.setAlerts(result.data.error);
+				$scope.resetCurrentUser();
+			}
 		});
 	}
 	$scope.init();
 
 	$scope.prev = function() {
 		CalenderService.getMutCal(-1).then(function(result) {
-			$scope.calender = result.data;
+			if (result.data.error == undefined) {
+				$scope.calender = result.data;
+			} else {
+				$scope.setAlerts(result.data.error);
+				$scope.resetCurrentUser();
+			}
 		});
 	}
 
 	$scope.next = function() {
 		CalenderService.getMutCal(1).then(function(result) {
-			$scope.calender = result.data;
+			if (result.data.error == undefined) {
+				$scope.calender = result.data;
+			} else {
+				$scope.setAlerts(result.data.error);
+				$scope.resetCurrentUser();
+			}
 		});
 	}
 
@@ -284,13 +326,14 @@ app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
 
 	$scope.save = function(prefs) {
 		PrefsService.save(prefs).then(function(result) {
-			if (result.data.data !== undefined) {
+			if (result.data.error == undefined) {
 				$scope.setAlerts([ {
 					type : 'success',
 					msg : "Preferences succesvol opgeslagen."
 				} ]);
 			} else {
 				$scope.setAlerts(result.data.error);
+				$scope.resetCurrentUser();
 			}
 		}, function(msg) {
 			$scope.setAlerts(msg);
@@ -302,7 +345,7 @@ app.controller('PrefsCtrl', function($scope, $compile, PrefsService) {
 app.controller('dagCtrl', function($scope, CalenderService) {
 
 	$scope.dag;
-	
+
 	$scope.click = function() {
 		switch ($scope.dag.soort) {
 		case 'K':
@@ -314,8 +357,8 @@ app.controller('dagCtrl', function($scope, CalenderService) {
 			$scope.dag.uren = 0.0;
 			break;
 		case 'C':
-			if ($scope.currentUser.displayname=='Jasper'){
-				// Speciaal(alleen) voor Jasper(mij) een DHN status. 
+			if ($scope.currentUser.displayname == 'Jasper') {
+				// Speciaal(alleen) voor Jasper(mij) een DHN status.
 				$scope.dag.soort = 'D';
 			} else {
 				$scope.dag.soort = 'V';
@@ -327,7 +370,7 @@ app.controller('dagCtrl', function($scope, CalenderService) {
 			$scope.dag.uren = 0.0;
 			break;
 		case 'V':
-			if ($scope.dag.isVerplichtVrij){
+			if ($scope.dag.isVerplichtVrij) {
 				// niets doen
 			} else if ($scope.dag.isSprintstart) {
 				$scope.dag.soort = 'S';

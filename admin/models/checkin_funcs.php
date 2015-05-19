@@ -542,3 +542,141 @@ function vrijedagenIdExists($id) {
 		return false;
 	}
 }
+
+/**
+ * Configs
+ */
+// Retrieve information for all configs
+function fetchAllConfigs() {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "SELECT
+		id,
+		sleutel,
+		waarde
+		FROM ch_config" );
+	$stmt->execute ();
+	$stmt->bind_result ( $id, $sleutel, $waarde );
+	$row = array();
+	while ( $stmt->fetch () ) {
+		$row [] = array (
+				'id' => $id,
+				'sleutel' => $sleutel,
+				'waarde' => $waarde 
+		);
+	}
+	$stmt->close ();
+	return ($row);
+}
+
+// Check if a permission level name exists in the DB
+function configNameExists($config) {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "SELECT id
+		FROM ch_config
+		WHERE
+		sleutel = ? 
+		LIMIT 1" );
+	$stmt->bind_param ( "s", $config );
+	$stmt->execute ();
+	$stmt->store_result ();
+	$num_returns = $stmt->num_rows;
+	$stmt->close ();
+	
+	if ($num_returns > 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// Create a config in DB
+function createConfig($sleutel) {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "INSERT INTO ch_config (
+		sleutel
+		)
+		VALUES (
+		?
+		)" );
+	$stmt->bind_param ( "s", $sleutel );
+	$result = $stmt->execute ();
+	$stmt->close ();
+	return $result;
+}
+
+// Delete a config from the DB
+function deleteConfigs($config) {
+	global $mysqli, $errors;
+	$i = 0;
+	$stmt = $mysqli->prepare ( "DELETE FROM ch_config
+		WHERE id = ?" );
+	foreach ( $config as $id ) {
+		$stmt->bind_param ( "i", $id );
+		$stmt->execute ();
+		$i ++;
+	}
+	$stmt->close ();
+	return $i;
+}
+
+// Change a config's name
+function updateChConfig($id, $sleutel, $waarde) {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "UPDATE ch_config
+		SET sleutel = ?,
+			waarde = ?
+		WHERE
+		id = ?
+		LIMIT 1" );
+	$stmt->bind_param ( "ssi", $sleutel, $waarde, $id );
+	$result = $stmt->execute ();
+	$stmt->close ();
+	return $result;
+}
+
+// Retrieve information for a single permission level
+function fetchConfigDetails($id) {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "SELECT
+		id,
+		sleutel,
+		waarde
+		FROM ch_config
+		WHERE
+		id = ?
+		LIMIT 1" );
+	$stmt->bind_param ( "i", $id );
+	$stmt->execute ();
+	$stmt->bind_result ( $id, $sleutel, $waarde );
+	$row = array ();
+	while ( $stmt->fetch () ) {
+		$row = array (
+				'id' => $id,
+				'sleutel' => $sleutel,
+				'waarde' => $waarde 
+		);
+	}
+	$stmt->close ();
+	return ($row);
+}
+
+// Check if a permission level ID exists in the DB
+function configIdExists($id) {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "SELECT id
+		FROM ch_config
+		WHERE
+		id = ?
+		LIMIT 1" );
+	$stmt->bind_param ( "i", $id );
+	$stmt->execute ();
+	$stmt->store_result ();
+	$num_returns = $stmt->num_rows;
+	$stmt->close ();
+	
+	if ($num_returns > 0) {
+		return true;
+	} else {
+		return false;
+	}
+}

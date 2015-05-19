@@ -6,10 +6,23 @@ if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 define ( 'SESSION_MONTHYEAR', 'monthYear' );
 $postdata = file_get_contents ( "php://input" );
 
-	$currentDate = getCurrentDate ()->format ( 'Y-m-d' );
-if (trim($postdata)!=""){
+$currentDate = getCurrentDate ()->format ( 'Y-m-d' );
+$today = $currentDate;
+if (trim ( $postdata ) != "") {
 	$currentDate = $postdata;
 }
+
+// Bepaal maxWerkplekken
+$sQuery = "SELECT waarde FROM ch_config WHERE sleutel = 'maxWerkplekken' LIMIT 1";
+
+$stmt = $mysqli->prepare ( $sQuery );
+$stmt->execute ();
+$stmt->bind_result ( $waarde );
+while ( $stmt->fetch () ) {
+	$maxWerkplekken = intval($waarde);
+}
+$stmt->close ();
+
 
 // Bepaal de huidige sprint
 $sQuery = "SELECT naam, datum FROM ch_sprints WHERE datum <= ? ORDER BY datum DESC LIMIT 1";
@@ -88,10 +101,10 @@ $sQuery = "SELECT datum
 $stmt = $mysqli->prepare ( $sQuery );
 $stmt->bind_param ( 'ss', $currentSprint ['datum'], $nextSprint ['datum'] );
 $stmt->execute ();
-$stmt->bind_result ( $datum);
+$stmt->bind_result ( $datum );
 $vrijdata = array ();
 while ( $stmt->fetch () ) {
-	$vrijdata [$datum]  = $datum;
+	$vrijdata [$datum] = $datum;
 }
 $stmt->close ();
 
@@ -127,13 +140,15 @@ while ( $stmt->fetch () ) {
 			'naam' => $userName,
 			'team' => $team,
 			'rgb' => $rgb,
-			'data' => getData ( $startDate, $endDate, $prefs, $afwdata, $userId, $functie, $team, $rgb , $vrijdata) 
+			'data' => getData ( $startDate, $endDate, $prefs, $afwdata, $userId, $functie, $team, $rgb, $vrijdata ) 
 	);
 	$users [] = $user;
 }
 $stmt->close ();
 
 $data = array (
+		'today' => $today,
+		'maxWerkplekken' => $maxWerkplekken,
 		'prevSprint' => $prevSprint,
 		'currSprint' => $currentSprint,
 		'nextSprint' => $nextSprint,
@@ -144,7 +159,7 @@ $data = array (
 
 echo json_encode ( $data );
 function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $team, $rgb, $vrijdata) {
-	global $totAanwezig, $totTeam;
+	global $totAanwezig, $totTeam, $today;
 	$interval = new DateInterval ( 'P1D' );
 	$datum = clone $startDate;
 	$data = array ();
@@ -156,6 +171,7 @@ function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $t
 		$dag->dow = intval ( $datum->format ( 'N' ) );
 		$dag->dowName = strftime ( '%a', strtotime ( $datum->format ( "d-m-Y" ) ) );
 		$dag->soort = 'K';
+		$dag->today = ($today == $datum->format ( 'Y-m-d' ));
 		if ($datum == $startDate) {
 			// Sprintstartdag
 			$dag->soort = 'S';
@@ -188,7 +204,7 @@ function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $t
 			$dag->soort = $afwdata [$dag->datum] [$userName]->soort;
 			$dag->uren = $afwdata [$dag->datum] [$userName]->uren;
 		}
-		if (isset($vrijdata[$dag->datum])){
+		if (isset ( $vrijdata [$dag->datum] )) {
 			$dag->soort = "V";
 			$dag->uren = 0;
 		}
@@ -207,14 +223,14 @@ function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $t
 		// Totaal per team per functie
 		if (isset ( $team )) {
 			if (! isset ( $totTeam [$team] )) {
-				$teamObj = array();
-				$teamObj['naam'] = $team;
-				$teamObj['rgb'] = $rgb;
-				$teamObj[$functie] = 0;
+				$teamObj = array ();
+				$teamObj ['naam'] = $team;
+				$teamObj ['rgb'] = $rgb;
+				$teamObj [$functie] = 0;
 				$totTeam [$team] = $teamObj;
 			}
-			if (! isset($totTeam [$team] [$functie])){
-				$totTeam [$team] [$functie]=0;
+			if (! isset ( $totTeam [$team] [$functie] )) {
+				$totTeam [$team] [$functie] = 0;
 			}
 			$totTeam [$team] [$functie] = $totTeam [$team] [$functie] + $dag->uren;
 		}

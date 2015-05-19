@@ -12,14 +12,19 @@
 		<tr>
 			<th></th>
 			<th></th>
-			<th ng-repeat="dag in data.users[0].data">
+			<th
+				class="top"
+				ng-class="{today: (dag.today)}" 
+				ng-repeat="dag in data.users[0].data">
 				{{dag.dowName}}
 			</th>
 		</tr>
 		<tr>
 			<th>Team</th>
 			<th>Naam</th>
-			<th ng-repeat="dag in data.users[0].data">
+			<th 
+				ng-class="{today: (dag.today)}" 
+				ng-repeat="dag in data.users[0].data">
 				{{dag.dag}}-{{dag.maand}}
 			</th>
 		</tr>
@@ -30,7 +35,7 @@
 			<td>{{user.naam}}</td>
 			<td 
 				class="dagobj"
-				ng-class="{dhn: (dag.soort=='D'),sprint: (dag.soort=='S'),cursus: (dag.soort=='C'), weekend:((dag.dow==6 && dag.soort != 'D') || (dag.dow==7 && dag.soort != 'D')) ,vrij: ((dag.uren==0.0 && dag.soort != 'C' && dag.soort != 'S' && dag.soort != 'D' && dag.soort != 'T') || dag.soort=='V'), thuis: (dag.soort=='T')}"
+				ng-class="{dhn: (dag.soort=='D'),sprint: (dag.soort=='S'),cursus: (dag.soort=='C'), weekend:((dag.dow==6 && dag.soort != 'D') || (dag.dow==7 && dag.soort != 'D')) ,vrij: ((dag.uren==0.0 && dag.soort != 'C' && dag.soort != 'S' && dag.soort != 'D' && dag.soort != 'T') || dag.soort=='V'), thuis: (dag.soort=='T'), today: (dag.today)}"
 				ng-repeat="dag in user.data">
 				<span class="uren" ng-if="dag.soort=='T' || dag.soort=='K'">{{dag.uren}}</span>
 				<span class="thuis glyphicon glyphicon-home" ng-if="dag.soort=='T'"></span>
@@ -41,12 +46,11 @@
 	</tbody>
 	<tfoot>
 		<tr>
-			<td></td>
-			<td>Totaal aanwezig F3 (max 19!)</td>
+			<td colspan="2">Totaal aanwezig (max {{data.maxWerkplekken}}!)</td>
 			<td 
-				ng-repeat="totaal in data.totaal"
-				ng-class="{goed: (totaal < 20), fout: (totaal >= 20)}">
-				{{totaal}}
+				ng-repeat="(key, value) in data.totaal"
+				ng-class="{goed: (value <= data.maxWerkplekken), fout: (value > data.maxWerkplekken), today: (key == data.today)}">
+				{{value}}
 			</td>
 		</tr>
 	</tfoot>

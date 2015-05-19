@@ -24,6 +24,7 @@ $master_account = -1;
 require_once("class.user.php");
 require_once("class.error.php");
 require_once("funcs.php");
+require_once("checkin-funcs.php");
 
 session_start();
 

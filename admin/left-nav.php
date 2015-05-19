@@ -31,6 +31,7 @@ if(isUserLoggedIn()) {
 	<li><a href='checkin_teams.php'>Teams</a></li>
 	<li><a href='checkin_sprintstarts.php'>Sprint starts</a></li>
 	<li><a href='checkin_vrijedagen.php'>Vrije dagen</a></li>
+	<li><a href='checkin_configs.php'>Configuratie</a></li>			
 	</ul>";
 	}
 } 

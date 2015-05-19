@@ -10,26 +10,29 @@ $request = json_decode ( $postdata );
 // Forms posted
 if (! empty ( $request )) {
 	$errors = array ();
-	$username = trim ( $_SESSION [SESSION_USER]->username );
-	
-	try {
-		$sQuery = "DELETE FROM ch_checkins WHERE user_name = ?";
+	$check = checkSession ();
+	if ($check != "OK") {
+		$errors [] = $check;
+	} else {
+		$username = trim ( $_SESSION [SESSION_USER]->username );
 		
-		$stmt = $mysqli->prepare ( $sQuery );
-		$stmt->bind_param ( 's', $username );
-		$stmt->execute ();
-		$stmt->close();
-		
-	} catch ( Exception $e ) {
-		$sMsg = 'Regelnummer: ' . $e->getLine () . '
+		try {
+			$sQuery = "DELETE FROM ch_checkins WHERE user_name = ?";
+			
+			$stmt = $mysqli->prepare ( $sQuery );
+			$stmt->bind_param ( 's', $username );
+			$stmt->execute ();
+			$stmt->close ();
+		} catch ( Exception $e ) {
+			$sMsg = 'Regelnummer: ' . $e->getLine () . '
 				Bestand: ' . $e->getFile () . '
-				Foutmelding: ' . $e->getMessage () ;
-		
-		$error = new error ();
-		$error->type = "danger";
-		$error->msg = $sMsg;
-		$errors [] = $error;
-		
+				Foutmelding: ' . $e->getMessage ();
+			
+			$error = new error ();
+			$error->type = "danger";
+			$error->msg = $sMsg;
+			$errors [] = $error;
+		}
 	}
 }
 if (count ( $errors ) > 0) {

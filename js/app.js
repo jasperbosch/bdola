@@ -25,8 +25,12 @@ var app = angular.module(
 				templateUrl : 'snippets/prefs.html',
 				controller : 'PrefsCtrl'
 			});
+			$routeProvider.when('/login', {
+				templateUrl : 'snippets/login-form.html',
+				controller : 'LoginController'
+			});
 			$routeProvider.otherwise({
-				redirectTo : 'check',
-				controller : 'CheckinCtrl',
+				redirectTo : 'afwovz',
+				controller : 'AfwOvzCtrl',
 			});
 		});

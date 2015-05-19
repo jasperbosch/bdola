@@ -68,7 +68,7 @@ td.dag{
 .dagobj.vrij{background-color:#92d050;}
 .dagobj.sprint{background-color:#ffc000;}
 .dagobj.weekend{background-color:silver;}
-.dagobj:hover{outline:1px solid cyan;cursor: pointer;}
+.afw .dagobj:hover{outline:1px solid cyan;cursor: pointer;}
 .dagobj.outsidemonth{background-color:silver;cursor: default;}
 
 
@@ -94,6 +94,11 @@ td.dag{
 .ovz .goed{background-color:#04B45F;text-align: center;font-weight: bold;}
 .ovz .fout{background-color:red;text-align: center;font-weight: bold;}
 
+.ovz tbody tr:hover {outline:solid 2px gray;}
+.ovz .today{border-left:solid 3px #ffc000;border-right:solid 3px #ffc000;}
+.ovz thead .today.top{border-top:solid 3px #ffc000;}
+.ovz tfoot .today{border-bottom:solid 3px #ffc000;}
+
 .form-uren .form-control:focus{box-shadow:none;}
 
 .form-signin .form-control.bootstrap-select{padding:0;}
@@ -112,3 +117,4 @@ td.dag{
 @media (max-width: 480px) {
 .dagobj{width:44px;height: 44px;} 
  }
+ 
