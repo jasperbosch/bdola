@@ -9,11 +9,19 @@
 </div>
 <table class="ovz">
 	<thead>
+	<tr>
+			<th class="top"></th>
+			<th class="top"></th>
+			<th
+				class="top"
+				ng-class="{today: (dag.today)}" 
+				ng-repeat="dag in data.users[0].data">
+			</th>
+		</tr>
 		<tr>
 			<th></th>
 			<th></th>
 			<th
-				class="top"
 				ng-class="{today: (dag.today)}" 
 				ng-repeat="dag in data.users[0].data">
 				{{dag.dowName}}
@@ -51,6 +59,14 @@
 				ng-repeat="(key, value) in data.totaal"
 				ng-class="{goed: (value <= data.maxWerkplekken), fout: (value > data.maxWerkplekken), today: (key == data.today)}">
 				{{value}}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="bottom"></td>
+			<td 
+				class="bottom"
+				ng-repeat="(key, value) in data.totaal"
+				ng-class="{today: (key == data.today)}">
 			</td>
 		</tr>
 	</tfoot>

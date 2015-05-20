@@ -84,8 +84,10 @@ td.dag{
 		top:-10px;
 }
 
-.ovz {margin-top:20px;}
-.ovz th, .ovz td{border:solid 1px gray;}
+.ovz {margin-top:20px;border-collapse: separate;}
+.ovz th, .ovz td{border-left:solid 1px gray;border-top:solid 1px gray;}
+.ovz th:last-child, .ovz td:last-child {border-right:solid 1px gray;}
+.ovz th, .ovz tbody td{white-space: nowrap;}
 .ovz th{text-align: center;}
 .ovz td{padding: 0 5px;}
 .ovz .dagobj{width:40px;height:20px;text-align: center;}
@@ -94,10 +96,15 @@ td.dag{
 .ovz .goed{background-color:#04B45F;text-align: center;font-weight: bold;}
 .ovz .fout{background-color:red;text-align: center;font-weight: bold;}
 
+.ovz .today{border-left:solid 3px #A9D0F5;border-right:solid 3px #A9D0F5;}
+.ovz thead .top{border:none;}
+.ovz thead .today.top{border-top:solid 6px #A9D0F5;border-left:solid 3px #A9D0F5;border-right:solid 3px #A9D0F5;border-radius: 5px 5px 0 0;background-clip: padding-box;}
+.ovz thead .today{background-color:#A9D0F5;border:none;}
 .ovz tbody tr:hover {outline:solid 2px gray;}
-.ovz .today{border-left:solid 3px #ffc000;border-right:solid 3px #ffc000;}
-.ovz thead .today.top{border-top:solid 3px #ffc000;}
-.ovz tfoot .today{border-bottom:solid 3px #ffc000;}
+.ovz tfoot td{border-bottom:solid 1px gray;}
+.ovz tfoot .bottom{border:none;}
+.ovz tfoot .today{border-bottom:none;}
+.ovz tfoot .today.bottom{border-bottom:solid 6px #A9D0F5;border-left:solid 3px #A9D0F5;border-right:solid 3px #A9D0F5;border-radius: 0 0 5px 5px;background-color:#A9D0F5;}
 
 .form-uren .form-control:focus{box-shadow:none;}
 

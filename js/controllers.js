@@ -40,6 +40,7 @@ app.controller('LoginController', function($scope, $rootScope, $location,
 				type : 'success',
 				msg : "User logged out"
 			} ]);
+			$location.path("/afwovz");
 		}, function() {
 			// console.log("Logout NOK");
 		});
