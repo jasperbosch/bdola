@@ -1,7 +1,7 @@
 var app = angular.module(
 		'checkinApp',
 		[ 'ui.router', 'ngCookies', 'ui.bootstrap', 'angular-bootstrap-select',
-				'angular-bootstrap-select.extra', 'ngRoute', 'angular.filter' ])
+				'angular-bootstrap-select.extra', 'ngRoute', 'angular.filter', 'ngTouch', 'ngAnimate' ])
 	.config(
 		function($routeProvider, $locationProvider, $httpProvider) {
 

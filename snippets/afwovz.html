@@ -1,4 +1,4 @@
-<div >
+<div>
 <h2>Sprint overzicht</h2>
 
 <h3>Sprint: {{data.currSprint.naam}}</h3>
@@ -7,6 +7,8 @@
   <button type="button" class="btn btn-default" ng-click="init()">Huidige</button>
   <button type="button" class="btn btn-default" ng-click="next()" ng-if="data.nextSprint.datum!=null">Volgende</button>
 </div>
+<div class="leftpanel" ng-swipe-right="prev()"></div>
+<div class="rightpanel" ng-swipe-left="next()"></div>
 <table class="ovz">
 	<thead>
 	<tr>
@@ -38,7 +40,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="user in data.users">
+		<tr ng-repeat="user in data.users" class="animate-repeat">
 			<td ng-style="{color:user.rgb}">{{user.team}}</td>
 			<td>{{user.naam}}</td>
 			<td 
@@ -71,7 +73,6 @@
 		</tr>
 	</tfoot>
 </table>
-
 <table ng-repeat="team in data.totaalTeam" class="totteam">
 	<tr>
 		<th colspan= "2" ng-style="{color: team.rgb}">{{team.naam}}</th>
