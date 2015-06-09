@@ -211,6 +211,9 @@ function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $t
 		if ($dag->soort == "K" && $dag->uren == 0) {
 			$dag->soort = "V";
 		}
+		if ($dag->soort == "S"){
+			$dag->uren = 0;
+		}
 		
 		// Totaal aantal bezette plekken per dag
 		if (! isset ( $totAanwezig [$dag->datum] )) {
