@@ -49,7 +49,7 @@ if (! empty ( $request )) {
             	?,?,?,?,?,?,?,?,?,?
         	)";
 				$stmt = $mysqli->prepare ( $sQuery );
-				$stmt->bind_param ( 'sisddddddd', $username, $team, $functie, $mo, $tu, $we, $th, $vr, $sa, $su );
+				$stmt->bind_param ( 'siiddddddd', $username, $team, $functie, $mo, $tu, $we, $th, $vr, $sa, $su );
 			} else {
 				// Er was al wel een record, dus UPDATE
 				$sQuery = "UPDATE ch_preferences SET
@@ -64,7 +64,7 @@ if (! empty ( $request )) {
 				su = ?
         	WHERE user_name = ?";
 				$stmt = $mysqli->prepare ( $sQuery );
-				$stmt->bind_param ( 'isddddddds', $team, $functie, $mo, $tu, $we, $th, $vr, $sa, $su, $username );
+				$stmt->bind_param ( 'iiddddddds', $team, $functie, $mo, $tu, $we, $th, $vr, $sa, $su, $username );
 			}
 			
 			$stmt->execute ();

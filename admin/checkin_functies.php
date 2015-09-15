@@ -12,8 +12,8 @@ if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 if (! empty ( $_POST )) {
 	if (! empty ( $_POST ['delete'] )) {
 		$deletions = $_POST ['delete'];
-		if ($deletion_count = deleteTeams ( $deletions )) {
-			$successes [] = lang ( "TEAM_DELETIONS_SUCCESSFUL", array (
+		if ($deletion_count = deleteFuncties ( $deletions )) {
+			$successes [] = lang ( "FUNCTIE_DELETIONS_SUCCESSFUL", array (
 					$deletion_count 
 			) );
 		} else {
@@ -22,23 +22,23 @@ if (! empty ( $_POST )) {
 	}
 	
 	// Create new permission level
-	if (! empty ( $_POST ['newTeam'] )) {
-		$team = trim ( $_POST ['newTeam'] );
+	if (! empty ( $_POST ['newFunctie'] )) {
+		$functie = trim ( $_POST ['newFunctie'] );
 		
 		// Validate request
-		if (teamNameExists ( $team )) {
-			$errors [] = lang ( "TEAM_NAME_IN_USE", array (
-					$team 
+		if (functieNameExists ( $functie )) {
+			$errors [] = lang ( "FUNCTIE_NAME_IN_USE", array (
+					$functie 
 			) );
-		} elseif (minMaxRange ( 1, 50, $team )) {
-			$errors [] = lang ( "TEAM_CHAR_LIMIT", array (
+		} elseif (minMaxRange ( 1, 50, $functie )) {
+			$errors [] = lang ( "FUNCTIE_CHAR_LIMIT", array (
 					1,
 					50 
 			) );
 		} else {
-			if (createTeam ( $team )) {
-				$successes [] = lang ( "TEAM_CREATION_SUCCESSFUL", array (
-						$team 
+			if (createFunctie ( $functie )) {
+				$successes [] = lang ( "FUNCTIE_CREATION_SUCCESSFUL", array (
+						$functie 
 				) );
 			} else {
 				$errors [] = lang ( "SQL_ERROR" );
@@ -47,7 +47,7 @@ if (! empty ( $_POST )) {
 	}
 }
 
-$userData = fetchAllTeams (); // Fetch information for all teams
+$userData = fetchAllFuncties (); // Fetch information for all functies
 
 require_once ("models/header.php");
 echo "
@@ -56,7 +56,7 @@ echo "
 <div id='top'><div id='logo'></div></div>
 <div id='content'>
 <h1>UserCake</h1>
-<h2>Checkin Teams</h2>
+<h2>Checkin Functies</h2>
 <div id='left-nav'>";
 
 include ("left-nav.php");
@@ -68,10 +68,10 @@ echo "
 echo resultBlock ( $errors, $successes );
 
 echo "
-<form name='checkinTeams' action='" . $_SERVER ['PHP_SELF'] . "' method='post'>
+<form name='checkinFuncties' action='" . $_SERVER ['PHP_SELF'] . "' method='post'>
 <table class='admin'>
 <tr>
-<th>Delete</th><th>Team</th><th>Kleur</th><th>ImCkc</th>
+<th>Delete</th><th>Functie</th><th>Code</th>
 </tr>";
 
 // Cycle through users
@@ -79,17 +79,16 @@ foreach ( $userData as $v1 ) {
 	echo "
 	<tr>
 	<td><input type='checkbox' name='delete[" . $v1 ['id'] . "]' id='delete[" . $v1 ['id'] . "]' value='" . $v1 ['id'] . "'></td>
-	<td><a href='checkin_team.php?id=" . $v1 ['id'] . "'>" . $v1 ['naam'] . "</a></td>
-	<td style='background-color:".$v1['rgb'].";'>".$v1['rgb']."</td>
-	<td>".$v1['imckc']."</td>
+	<td><a href='checkin_functie.php?id=" . $v1 ['id'] . "'>" . $v1 ['naam'] . "</a></td>
+	<td>".$v1['code']."</td>
 	</tr>";
 }
 
 echo "
 </table>
 <p>
-<label>Team naam:</label>
-<input type='text' name='newTeam' />
+<label>Functie naam:</label>
+<input type='text' name='newFunctie' />
 </p>                                
 <input type='submit' name='Submit' value='Submit' />
 </form>

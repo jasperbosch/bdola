@@ -141,16 +141,18 @@ function fetchAllTeams() {
 	$stmt = $mysqli->prepare ( "SELECT
 		id,
 		naam,
-		rgb
+		rgb,
+		imckc
 		FROM ch_teams" );
 	$stmt->execute ();
-	$stmt->bind_result ( $id, $naam, $rgb );
+	$stmt->bind_result ( $id, $naam, $rgb, $imckc);
 	$row = array();
 	while ( $stmt->fetch () ) {
 		$row [] = array (
 				'id' => $id,
 				'naam' => $naam,
-				'rgb' => $rgb 
+				'rgb' => $rgb,
+				'imckc' => $imckc 
 		);
 	}
 	$stmt->close ();
@@ -209,15 +211,16 @@ function deleteTeams($team) {
 }
 
 // Change a team's name
-function updateTeam($id, $naam, $rgb) {
+function updateTeam($id, $naam, $rgb, $imckc) {
 	global $mysqli;
 	$stmt = $mysqli->prepare ( "UPDATE ch_teams
 		SET naam = ?,
-			rgb = ?
+			rgb = ?,
+			imckc = ?
 		WHERE
 		id = ?
 		LIMIT 1" );
-	$stmt->bind_param ( "ssi", $naam, $rgb, $id );
+	$stmt->bind_param ( "ssii", $naam, $rgb, $imckc, $id );
 	$result = $stmt->execute ();
 	$stmt->close ();
 	return $result;
@@ -229,20 +232,22 @@ function fetchTeamDetails($id) {
 	$stmt = $mysqli->prepare ( "SELECT
 		id,
 		naam,
-		rgb
+		rgb,
+		imckc
 		FROM ch_teams
 		WHERE
 		id = ?
 		LIMIT 1" );
 	$stmt->bind_param ( "i", $id );
 	$stmt->execute ();
-	$stmt->bind_result ( $id, $naam, $rgb );
+	$stmt->bind_result ( $id, $naam, $rgb, $imckc );
 	$row = array ();
 	while ( $stmt->fetch () ) {
 		$row = array (
 				'id' => $id,
 				'naam' => $naam,
-				'rgb' => $rgb 
+				'rgb' => $rgb,
+				'imckc' => $imckc 
 		);
 	}
 	$stmt->close ();
@@ -674,6 +679,144 @@ function configIdExists($id) {
 	$num_returns = $stmt->num_rows;
 	$stmt->close ();
 	
+	if ($num_returns > 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Functies
+ */
+// Retrieve information for all functies
+function fetchAllFuncties() {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "SELECT
+		id,
+		naam,
+		code
+		FROM ch_functies" );
+	$stmt->execute ();
+	$stmt->bind_result ( $id, $naam, $code );
+	$row = array();
+	while ( $stmt->fetch () ) {
+		$row [] = array (
+				'id' => $id,
+				'naam' => $naam,
+				'code' => $code
+		);
+	}
+	$stmt->close ();
+	return ($row);
+}
+
+// Check if a permission level name exists in the DB
+function functieNameExists($functie) {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "SELECT id
+		FROM ch_functies
+		WHERE
+		naam = ?
+		LIMIT 1" );
+	$stmt->bind_param ( "s", $functie );
+	$stmt->execute ();
+	$stmt->store_result ();
+	$num_returns = $stmt->num_rows;
+	$stmt->close ();
+
+	if ($num_returns > 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// Create a functie in DB
+function createFunctie($naam) {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "INSERT INTO ch_functies (
+		naam
+		)
+		VALUES (
+		?
+		)" );
+	$stmt->bind_param ( "s", $naam );
+	$result = $stmt->execute ();
+	$stmt->close ();
+	return $result;
+}
+
+// Delete a functie from the DB
+function deleteFuncties($functie) {
+	global $mysqli, $errors;
+	$i = 0;
+	$stmt = $mysqli->prepare ( "DELETE FROM ch_functies
+		WHERE id = ?" );
+	foreach ( $functie as $id ) {
+		$stmt->bind_param ( "i", $id );
+		$stmt->execute ();
+		$i ++;
+	}
+	$stmt->close ();
+	return $i;
+}
+
+// Change a functie's name
+function updateFunctie($id, $naam, $code) {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "UPDATE ch_functies
+		SET naam = ?,
+			code = ?
+		WHERE
+		id = ?
+		LIMIT 1" );
+	$stmt->bind_param ( "ssi", $naam, $code, $id );
+	$result = $stmt->execute ();
+	$stmt->close ();
+	return $result;
+}
+
+// Retrieve information for a single permission level
+function fetchFunctieDetails($id) {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "SELECT
+		id,
+		naam,
+		code
+		FROM ch_functies
+		WHERE
+		id = ?
+		LIMIT 1" );
+	$stmt->bind_param ( "i", $id );
+	$stmt->execute ();
+	$stmt->bind_result ( $id, $naam, $code );
+	$row = array ();
+	while ( $stmt->fetch () ) {
+		$row = array (
+				'id' => $id,
+				'naam' => $naam,
+				'code' => $code
+		);
+	}
+	$stmt->close ();
+	return ($row);
+}
+
+// Check if a permission level ID exists in the DB
+function functieIdExists($id) {
+	global $mysqli;
+	$stmt = $mysqli->prepare ( "SELECT id
+		FROM ch_functies
+		WHERE
+		id = ?
+		LIMIT 1" );
+	$stmt->bind_param ( "i", $id );
+	$stmt->execute ();
+	$stmt->store_result ();
+	$num_returns = $stmt->num_rows;
+	$stmt->close ();
+
 	if ($num_returns > 0) {
 		return true;
 	} else {

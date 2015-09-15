@@ -6,14 +6,14 @@ if (! securePage ( $_SERVER ['PHP_SELF'] )) {
 $errors = array ();
 
 try {
-	$sQuery = "SELECT * FROM ch_teams";
+	$sQuery = "SELECT * FROM ch_functies";
 	
 	$stmt = $mysqli->prepare ( $sQuery );
 	$stmt->execute();
-	$stmt->bind_result($id,$naam,$rgb,$imckc);
+	$stmt->bind_result($id,$naam,$code);
 	
 	while ($stmt->fetch()){
-		$data[]=array('id'=>$id,'naam'=>$naam,'rgb'=>$rgb,'imckc'=>$imckc);
+		$data[]=array('id'=>$id,'naam'=>$naam,'code'=>$code);
 	}
 	$stmt->close();
 	

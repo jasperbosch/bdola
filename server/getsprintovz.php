@@ -19,11 +19,18 @@ $stmt = $mysqli->prepare ( $sQuery );
 $stmt->execute ();
 $stmt->bind_result ( $waarde );
 while ( $stmt->fetch () ) {
-	$maxWerkplekken = intval($waarde);
+	$maxWerkplekken = intval ( $waarde );
 }
 $stmt->close ();
+$sQuery = "SELECT waarde FROM ch_config WHERE sleutel = 'maxWerkplekkenImCkc' LIMIT 1";
 
-
+$stmt = $mysqli->prepare ( $sQuery );
+$stmt->execute ();
+$stmt->bind_result ( $waarde );
+while ( $stmt->fetch () ) {
+	$maxImckcWerkplekken = intval ( $waarde );
+}
+$stmt->close ();
 // Bepaal de huidige sprint
 $sQuery = "SELECT naam, datum FROM ch_sprints WHERE datum <= ? ORDER BY datum DESC LIMIT 1";
 
@@ -109,21 +116,24 @@ while ( $stmt->fetch () ) {
 $stmt->close ();
 
 // Bepaal de users
-$sQuery = "SELECT a.user_name, a.display_name, c.naam, c.rgb, b.mo, b.tu, b.we, b.th, b.vr, b.sa, b.su, b.functie
+$sQuery = "SELECT a.user_name, a.display_name, c.naam, c.rgb, b.mo, b.tu, b.we, b.th, b.vr, b.sa, b.su, d.code, c.imckc
 		FROM uc_users a
 		LEFT JOIN ch_preferences b
 			ON b.user_name = a.user_name
 		LEFT JOIN ch_teams c
 			ON c.id = b.team
+		LEFT JOIN ch_functies d
+			ON d.id = b.functie
 		ORDER BY c.naam, a.display_name ASC";
 
 $stmt = $mysqli->prepare ( $sQuery );
 $stmt->execute ();
-$stmt->bind_result ( $userId, $userName, $team, $rgb, $ma, $tu, $we, $th, $vr, $sa, $su, $functie );
+$stmt->bind_result ( $userId, $userName, $team, $rgb, $ma, $tu, $we, $th, $vr, $sa, $su, $functie, $imckc );
 $users = array ();
 
 $users = array ();
 $totAanwezig = array ();
+$totImckcAanwezig = array ();
 $totTeam = array ();
 while ( $stmt->fetch () ) {
 	$prefs = array (
@@ -140,7 +150,7 @@ while ( $stmt->fetch () ) {
 			'naam' => $userName,
 			'team' => $team,
 			'rgb' => $rgb,
-			'data' => getData ( $startDate, $endDate, $prefs, $afwdata, $userId, $functie, $team, $rgb, $vrijdata ) 
+			'data' => getData ( $startDate, $endDate, $prefs, $afwdata, $userId, $functie, $team, $rgb, $vrijdata, $imckc ) 
 	);
 	$users [] = $user;
 }
@@ -149,17 +159,19 @@ $stmt->close ();
 $data = array (
 		'today' => $today,
 		'maxWerkplekken' => $maxWerkplekken,
+		'maxImckcWerkplekken' => $maxImckcWerkplekken,
 		'prevSprint' => $prevSprint,
 		'currSprint' => $currentSprint,
 		'nextSprint' => $nextSprint,
 		'totaal' => $totAanwezig,
+		'totaalimckc' => $totImckcAanwezig,
 		'totaalTeam' => $totTeam,
 		'users' => $users 
 );
 
 echo json_encode ( $data );
-function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $team, $rgb, $vrijdata) {
-	global $totAanwezig, $totTeam, $today;
+function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $team, $rgb, $vrijdata, $imckc) {
+	global $totAanwezig, $totImckcAanwezig, $totTeam, $today;
 	$interval = new DateInterval ( 'P1D' );
 	$datum = clone $startDate;
 	$data = array ();
@@ -211,16 +223,21 @@ function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $t
 		if ($dag->soort == "K" && $dag->uren == 0) {
 			$dag->soort = "V";
 		}
-		if ($dag->soort == "S"){
+		if ($dag->soort == "S") {
 			$dag->uren = 0;
 		}
 		
 		// Totaal aantal bezette plekken per dag
 		if (! isset ( $totAanwezig [$dag->datum] )) {
 			$totAanwezig [$dag->datum] = 0;
+			$totImckcAanwezig [$dag->datum] = 0;
 		}
-		if ($dag->soort == "K") {
-			$totAanwezig [$dag->datum] ++;
+		if ($dag->soort == "K" || $dag->soort == "S") {
+			if ($imckc) {
+				$totImckcAanwezig [$dag->datum] ++;
+			} else {
+				$totAanwezig [$dag->datum] ++;
+			}
 		}
 		
 		// Totaal per team per functie
@@ -229,13 +246,14 @@ function getData($startDate, $endDate, $prefs, $afwdata, $userName, $functie, $t
 				$teamObj = array ();
 				$teamObj ['naam'] = $team;
 				$teamObj ['rgb'] = $rgb;
-				$teamObj [$functie] = 0;
+				$teamObj ['functies'] = array ();
 				$totTeam [$team] = $teamObj;
 			}
-			if (! isset ( $totTeam [$team] [$functie] )) {
-				$totTeam [$team] [$functie] = 0;
+			if (! isset ( $totTeam [$team] ['functies'] [$functie] ['code'] )) {
+				$totTeam [$team] ['functies'] [$functie] ['code'] = $functie;
+				$totTeam [$team] ['functies'] [$functie] ['uren'] = 0;
 			}
-			$totTeam [$team] [$functie] = $totTeam [$team] [$functie] + $dag->uren;
+			$totTeam [$team] ['functies'] [$functie] ['uren'] = $totTeam [$team] ['functies'] [$functie] ['uren'] + $dag->uren;
 		}
 		
 		// Bepaal de volgende datum

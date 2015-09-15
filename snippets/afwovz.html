@@ -56,10 +56,18 @@
 	</tbody>
 	<tfoot>
 		<tr>
-			<td colspan="2">Totaal aanwezig (max {{data.maxWerkplekken}}!)</td>
+			<td colspan="2">Totaal aanwezig CAO(max {{data.maxWerkplekken}}!)</td>
 			<td 
 				ng-repeat="(key, value) in data.totaal"
 				ng-class="{goed: (value <= data.maxWerkplekken), fout: (value > data.maxWerkplekken), today: (key == data.today)}">
+				{{value}}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">Totaal aanwezig IM/CKC(max {{data.maxImckcWerkplekken}}!)</td>
+			<td 
+				ng-repeat="(key, value) in data.totaalimckc"
+				ng-class="{goed: (value <= data.maxImckcWerkplekken), fout: (value > data.maxImckcWerkplekken), today: (key == data.today)}">
 				{{value}}
 			</td>
 		</tr>
@@ -77,21 +85,9 @@
 	<tr>
 		<th colspan= "2" ng-style="{color: team.rgb}">{{team.naam}}</th>
 	</tr>
-	<tr ng-if="team.Ontwerper!=null">
-		<th>O</th>
-		<td>{{team.Ontwerper}}</td>
-	</tr>
-	<tr ng-if="team.Bouwer!=null">
-		<th>B</th>
-		<td>{{team.Bouwer}}</td>
-	</tr>
-	<tr ng-if="team.LeadBouwer!=null">
-		<th>LB</th>
-		<td>{{team.LeadBouwer}}</td>
-	</tr>
-	<tr ng-if="team.Tester!=null">
-		<th>T</th>
-		<td>{{team.Tester}}</td>
+	<tr ng-repeat="functie in team.functies">
+		<th>{{functie.code}}</th>
+		<td>{{functie.uren}}</td>
 	</tr>
 </table>
 

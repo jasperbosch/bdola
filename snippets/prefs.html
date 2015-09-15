@@ -15,18 +15,14 @@
         	     </select>
              </div>
              
-             <div class="input-group">
+              <div class="input-group">
 				<label for="functie" class="sr-only">Functie:</label> 
     			<span class="input-group-addon glyphicon glyphicon-tags"></span>
-				<select selectpicker data-ng-model="prefs.functie" class="form-control">
+				<select selectpicker data-ng-model="prefs.functie" ng-options="functie.id as functie.naam for functie in functies" class="form-control">
     	             <option value="">Kies een functie...</option>
-    	             <option >Ontwerper</option>
-    	             <option >Bouwer</option>
-    	             <option >Tester</option>
-    	             <option >LeadBouwer</option>
-    	             <option >ProjectManager</option>
         	     </select>
              </div>
+
              
              	<label>Uren per dag</label>
              <div class="input-group">

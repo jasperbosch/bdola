@@ -29,6 +29,7 @@ if(isUserLoggedIn()) {
 	<ul>
 	<li><a href='checkin_locaties.php'>Locaties</a></li>
 	<li><a href='checkin_teams.php'>Teams</a></li>
+	<li><a href='checkin_functies.php'>Functies</a></li>
 	<li><a href='checkin_sprintstarts.php'>Sprint starts</a></li>
 	<li><a href='checkin_vrijedagen.php'>Vrije dagen</a></li>
 	<li><a href='checkin_configs.php'>Configuratie</a></li>			

@@ -52,6 +52,7 @@ app.controller('ApplicationController', function($scope, AuthService,
 	$scope.currentUser = null;
 	$scope.isAuthorized = AuthService.isAuthorized;
 	$scope.teams;
+	$scope.functies;
 	$scope.check;
 
 	$scope.isLoginPage = false;
@@ -76,9 +77,16 @@ app.controller('ApplicationController', function($scope, AuthService,
 				$scope.setAlerts(result.data.error);
 			}
 		});
+		PrefsService.getfuncties().then(function(result) {
+			if (result.data.error === undefined) {
+				$scope.functies = result.data;
+			} else {
+				$scope.setAlerts(result.data.error);
+			}
+		});
 		$scope.prefs = {
-			team : '',
-			functie : '',
+			team : 0,
+			functie : 0,
 			mo : 8,
 			tu : 8,
 			we : 8,

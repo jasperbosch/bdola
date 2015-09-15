@@ -34,19 +34,25 @@ if(!empty($_POST)){
 	else
 	{
 		//Update permission level name
-		if($teamDetails['naam'] != $_POST['naam'] || $teamDetails['rgb'] != $_POST['rgb']) {
+		$imckcChecked = false;
+		$imckcChecked = ($teamDetails['imckc'] == 0 && $_POST['imckc']) || ($teamDetails['imckc'] == 1 && !isset($_POST['imckc']));
+		if($teamDetails['naam'] != $_POST['naam'] || $teamDetails['rgb'] != $_POST['rgb'] || $imckcChecked) {
 			$naam = trim($_POST['naam']);
 			$rgb = trim($_POST['rgb']);
+			$imckc = 0;
+			if (isset($_POST['imckc'])){
+				$imckc = $_POST['imckc'];
+			}
 			
 			//Validate new name
-			if (teamNameExists($naam) && $teamDetails['rgb'] == $_POST['rgb']){
+			if (teamNameExists($naam) && $teamDetails['rgb'] == $_POST['rgb'] && !$imckcChecked){
 				$errors[] = lang("TEAM_NAME_IN_USE", array($naam));
 			}
 			elseif (minMaxRange(1, 50, $naam)){
 				$errors[] = lang("TEAM_CHAR_LIMIT", array(1, 50));	
 			}
 			else {
-				if (updateTeam($teamId, $naam, $rgb)){
+				if (updateTeam($teamId, $naam, $rgb, $imckc)){
 					$successes[] = lang("TEAM_NAME_UPDATE", array($naam));
 				}
 				else {
@@ -96,7 +102,15 @@ echo "
 <label>Kleur:</label>
 <input type='text' name='rgb' value='".$teamDetails['rgb']."' />
 </p>
-		<label>Delete:</label>
+<p>
+<label>ImCkc:</label>
+<input type='checkbox' name='imckc' value='1' ";
+if ($teamDetails['imckc']==1){
+	echo "checked";
+}
+echo " />
+</p>
+	<label>Delete:</label>
 <input type='checkbox' name='delete[".$teamDetails['id']."]' id='delete[".$teamDetails['id']."]' value='".$teamDetails['id']."'>
 </p>
 </div></td>

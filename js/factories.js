@@ -112,6 +112,13 @@ app.factory('PrefsService', function($http, Session) {
 				}
 			);
 	}
+	prefsService.getfuncties = function(){
+		return $http.get('server/getfuncties.php').then(
+				function(result){
+					return result;
+				}
+			);
+	}
 	return prefsService;
 })
 
